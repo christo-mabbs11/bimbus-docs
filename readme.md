@@ -1,5 +1,24 @@
-Bimbus 📚🚀
-===========
+<body>
+    <div align="center">
+        <h1 align="center">
+            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/bgs.png" width="80" />
+            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/openai.png" width="80" />
+            <br>Bimbus AI
+        </h1>
+        <h3>Code Documentation Made Simple.</h3>
+        <h3>Developed using OpenAI's GPT language model APIs.</h3>
+        <br>
+        <p align="center">
+            <img src="https://img.shields.io/badge/Markdown-000000.svg?stylee&logo=Markdown&logoColor=white" alt="Markdown" />
+            <img src="https://img.shields.io/badge/Node.js-339933.svg?style=flat&logo=node.js&logoColor=white" alt="Node JS" />
+            <img src="https://img.shields.io/badge/npm-CB3837.svg?style=flat&logo=npm&logoColor=white" alt="NPM" />
+            <img src="https://img.shields.io/badge/OpenAI-412991.svg?stylee&logo=OpenAI&logoColor=white" alt="OpenAI" />
+        </p>
+    </div>
+</body>
+
+Overview
+-------------------
 
 Bimbus is a command line tool built with Node.js that leverages OpenAI technology to generate thorough documentation for code files, such as .php, .ts, and more. With Bimbus, you can easily generate comprehensive documentation to enhance the understanding and maintainability of your codebase.
 
@@ -23,6 +42,22 @@ To install Bimbus, follow these steps:
 
     $ ./install.sh
     
+
+#### 🔐 OpenAI API
+
+To use the README-AI application, you will need to create an account with OpenAI to generate an API key. The steps below outline this setup process:
+
+<details closed><summary>OpenAI API User Guide</summary>
+
+1. Go to the [OpenAI website](https://platform.openai.com/).
+2. Click the "Sign up for free" button.
+3. Fill out the registration form with your information and agree to the terms of service.
+4. Once logged in, click on the "API" tab.
+5. Follow the instructions to create a new API key.
+6. Copy the API key and keep it in a secure place.
+
+</details>
+<br>
 
 Usage
 -----
