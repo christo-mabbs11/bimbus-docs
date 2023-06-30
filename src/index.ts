@@ -66,7 +66,7 @@ async function main ( ) {
   const outputDir = options.output ? options.output : __dirname;
 
   // Info output
-  console.log("Running Bimbus AI...\n");
+  console.log("Running Bimbus AI..\n");
 
   // If verbose is specified, print the details
   if (options.verbose) {
@@ -94,7 +94,7 @@ async function main ( ) {
   }
 
   // Info output
-  console.log("Generating Documentation\n");
+  console.log("Generating Documentation..\n");
 
   // Fetch the contents of the input file
   const input = fs.readFileSync(inputFile, "utf8");
@@ -109,6 +109,8 @@ async function main ( ) {
       "technical-summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single sentence.\n"+input+"\n",
       "technical-details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single paragraph.\n"+input+"\n",
   };
+
+  // Used to hold the replies
   var replies : { [ id : string ] : string } = { };
 
   // Loop through the prompts and generate the responses
@@ -116,9 +118,6 @@ async function main ( ) {
     let key = Object.keys(prompts)[i1];
     replies[key] = await openAIChatCompletions( openAIToken, prompts[key] );
   }
-
-  // Print the replies
-  console.log(replies);
 
   // Info output
   console.log("Done!");
