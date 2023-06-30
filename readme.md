@@ -32,10 +32,10 @@ Installation
 ------------
 
 ```
-$ git clone https://github.com/bitgangstudio/bimbus-cli.git
-$ cd bimbus-cli
-$ npm install
-$ npm run build
+ $ git clone https://github.com/bitgangstudio/bimbus-cli.git
+ $ cd bimbus-cli
+ $ npm install
+ $ npm run build
 ```
 
 OpenAI API
@@ -55,7 +55,7 @@ Usage
 
 To generate documentation using Bimbus, run the following command:
 ```
-$ node dist/index.js -t <openai_access_token> -i <input_file_path> \
+ $ node dist/index.js -t <openai_access_token> -i <input_file_path> \
             [-o <output_file_directory>] [-f <filetype>] \
             [-v] [-h]
 ```
@@ -75,27 +75,27 @@ The following are some examples on how to run Bimbus.
 
 Basic usage:
 ```
-$ node dist/index.js -t <OpenAI Access Token> -i path/to/file.js
+ $ node dist/index.js -t <OpenAI Access Token> -i path/to/file.js
 ```
 
 Specifying an output directory:
 ```
-$ node dist/index.js -t <OpenAI Access Token> -i path/to/file.py -o output/docs/
+ $ node dist/index.js -t <OpenAI Access Token> -i path/to/file.py -o output/docs/
 ```
 
 Customizing the output file type:
 ```
-$ node dist/index.js -t <OpenAI Access Token> -i path/to/file.ts -f html
+ $ node dist/index.js -t <OpenAI Access Token> -i path/to/file.ts -f html
 ```
 
 Enabling verbose output:
 ```
-$ node dist/index.js -t <OpenAI Access Token> -i path/to/file.py -v
+ $ node dist/index.js -t <OpenAI Access Token> -i path/to/file.py -v
 ```
 
 Displaying help message:
 ```
-$ node dist/index.js --help
+ $ node dist/index.js --help
 ```
 
 Contributions and Issues
