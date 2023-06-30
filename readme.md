@@ -3,6 +3,7 @@
         <h1 align="center">
             <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/bgs.png" width="38" />
             <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/openai.png" width="38" />
+            <br/>
             Bimbus AI
         </h1>
         <p><strong>Code Documentation Made Simple</strong></p>
