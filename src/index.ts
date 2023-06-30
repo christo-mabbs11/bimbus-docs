@@ -10,6 +10,8 @@ const path = require("path");
 const figlet = require("figlet");
 const { Configuration, OpenAIApi } = require("openai");
 import { Document, Packer, Paragraph, TextRun } from "docx";
+const cliProgress = require('cli-progress');
+const colors = require('ansi-colors');
 
 /////////////////////////
 // Main Functionality //
@@ -23,6 +25,7 @@ async function main ( ) {
   const program = new Command( );
 
   // Print the banner
+  console.log("\n");
   console.log(figlet.textSync("Bimbus AI"));
 
   // Define the details
@@ -46,6 +49,9 @@ async function main ( ) {
   if (options.help) {
     errorAndExit("");
   }
+
+  // Info output
+  console.log("\n🔄 Processing Input..\n");
 
   // If the token is not specified, show an error and print the help
   if (!options.token) {
@@ -72,9 +78,6 @@ async function main ( ) {
 
   // If no output type is specified, default to markdown
   const outputType = options.filetype ? options.filetype : "markdown";
-
-  // Info output
-  console.log("Running Bimbus AI..\n");
 
   // If verbose is specified, print the details
   if (options.verbose) {
@@ -107,7 +110,7 @@ async function main ( ) {
   }
 
   // Info output
-  console.log("Generating Documentation..\n");
+  console.log("📚 Generating Documentation..\n");
 
   // Fetch the contents of the input file
   let input = fs.readFileSync(inputFile, "utf8");
@@ -121,7 +124,7 @@ async function main ( ) {
   const inputBaseName = path.basename(inputFile);
 
   // Generate a series of prompts to send to the Open AI API
-  const prompts : { [ id : string ] : string } = {
+  var prompts : { [ id : string ] : string } = {
       "Introduction" : "You will be provided code from the file '"+inputBaseName+"'. Summarise and produce an introduction of '"+inputBaseName+"'. Use a confident tone and respond with a single sentence.\n"+input+"\n",
       "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Use a confident tone and respond in a few sentences.\n"+input+"\n",
       "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Use a confident tone and respond in a few paragraphs.\n"+input+"\n",
@@ -132,20 +135,53 @@ async function main ( ) {
   // Used to hold the replies
   var replies : { [ id : string ] : string } = { };
 
+  // create a new progress bar instance and use shades_classic theme
+  const progressBar = new cliProgress.SingleBar({
+    format: '🚀 Generating.. |' + colors.cyan('{bar}') + '| {percentage}% | {value}/{total} Jobs | Remaining: {speed}',
+    barCompleteChar: '\u2588',
+    barIncompleteChar: '\u2591',
+  });
+
+  // Start the progress bar with a total value of 200 and start value of 0
+  progressBar.start(Object.keys(prompts).length, 0, { speed: "N/A" } );
+
+  // Get the current starting time in milliseconds
+  let startTime = new Date( ).getTime( );
+
   // Loop through the prompts and generate the responses
   for (let i1 = 0 ; i1 < Object.keys(prompts).length ; i1++ ) {
+
+    // Fetch the reply
     let key = Object.keys(prompts)[i1];
     replies[key] = await openAIChatCompletions( openAIToken, prompts[key], options.verbose );
+
+    // Get the updated time in milliseconds
+    let currentTime = new Date( ).getTime( );
+
+    // Find the time difference in seconds
+    let timeDifference = (currentTime - startTime) / 1000;
+
+    // Determine how long the job will take
+    let i2 = i1 + 1;
+    let remainingJobs = Object.keys(prompts).length - i2;
+    let tspeed = (timeDifference/i2*remainingJobs).toFixed(1) + "s";
+
+    // Update the progress bar
+    progressBar.update((i1+1), { speed: tspeed });
+
   }
 
+  // stop the progress bar
+  progressBar.stop( );
+
   // Info output
-  console.log("Writing Output..\n");
+  console.log("\n📝 Writing Output..\n");
 
   // Write the output to a file
   await writeOutputToFile( outputDir, outputType, replies, inputBaseName );
 
   // Info output
-  console.log("Done!");
+  console.log("🎉 All Done!\n");
 
 }
 
@@ -221,9 +257,6 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
   let outputText = "";
   if (outputType === "markdown") {
 
-    // Info output
-    console.log("Writing Markdown Output..\n");
-
     // Add the title to the output
     outputText += "# " + originalFileName + " Documentation\n\n";
 
@@ -238,9 +271,6 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
     fs.writeFileSync(fullFilePath, outputText);
 
   } else if (outputType === "docx") {
-
-    // Info output
-    console.log("Generating DOCX file..\n");
 
     // Create the paragraphs
     const paragraphs = [ ];
@@ -279,9 +309,6 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
 
   } else if (outputType === "text") {
 
-    // Info output
-    console.log("Generating TXT file..\n");
-
     // Add the title to the output
     outputText += originalFileName + " Documentation\n\n";
 
@@ -296,9 +323,6 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
     fs.writeFileSync(fullFilePath, outputText);
 
   } else if (outputType === "html") {
-
-    // Info output
-    console.log("Generating HTML file..\n");
 
     // Add the title to the output
     outputText += "<h1>" + originalFileName + " Documentation</h1>\n\n";
