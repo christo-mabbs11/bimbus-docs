@@ -125,11 +125,11 @@ async function main ( ) {
 
   // Generate a series of prompts to send to the Open AI API
   var prompts : { [ id : string ] : string } = {
-      "Introduction" : "You will be provided code from the file '"+inputBaseName+"'. Summarise and produce an introduction of '"+inputBaseName+"'. Use a confident tone and respond with a single sentence.\n"+input+"\n",
-      "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Use a confident tone and respond in a few sentences.\n"+input+"\n",
-      "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Use a confident tone and respond in a few paragraphs.\n"+input+"\n",
-      "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' from a technical perspective. Use a confident tone and respond in a a few sentences.\n"+input+"\n",
-      "Technical Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' from a technical perspective. Use a confident tone and respond in a few paragraphs.\n"+input+"\n",
+      "Introduction" : "You will be provided code from the file '"+inputBaseName+"'. Summarise and produce an introduction of '"+inputBaseName+"'. Provide only a single sentence.\n"+input+"\n",
+      "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Provide about 5 sentences.\n"+input+"\n",
+      "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Provide about 5 paragraphs.\n"+input+"\n",
+      "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide information on the functionality of the code from '"+inputBaseName+"' from a purely technical perspective for an experienced developer. Provide about 5 sentences.\n"+input+"\n",
+      "Technical Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide information on the functionality of the code from '"+inputBaseName+"' from a purely technical perspective for an experienced developer. Provide about 5 paragraphs.\n"+input+"\n",
   };
 
   // Used to hold the replies
