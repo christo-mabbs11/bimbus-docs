@@ -20,7 +20,9 @@
 Overview
 -------------------
 
-Bimbus is a command line tool built with Node.js that leverages OpenAI technology to generate thorough documentation for code files, such as .php, .ts, and more. With Bimbus, you can easily generate comprehensive documentation to enhance the understanding and maintainability of your codebase.
+A sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. With Bimbus, effortlessly generate thorough and comprehensive documentation for your code files, whether it's PHP, TypeScript, or more.
+
+Enhance understanding and maintainability of your codebase with ease, empowering collaboration and onboarding. Streamline your development process and unlock the full potential of your code, as Bimbus becomes your trusted ally in the pursuit of code documentation excellence.
 
 System Requirements
 -------------------
@@ -33,21 +35,25 @@ To use Bimbus, ensure that you have the following system requirements:
 Installation
 ------------
 
-To install Bimbus, follow these steps:
+To install Bimbus and its dependencies, follow these simple steps:
 
-1.  Download the Bimbus repository.
-2.  Open a terminal or command prompt.
-3.  Navigate to the downloaded repository directory.
-4.  Run the following bash script to install Bimbus:
+1. Download the Bimbus repository.
+2. Open a terminal or command prompt.
+3. Navigate to the downloaded repository directory.
+4. Run the following command to install the required dependencies:
 
-    $ ./install.sh
-    
+    $ npm install
 
-#### 🔐 OpenAI API
+5. Once the dependencies are installed, proceed with building the app by running the following command:
 
-To use the README-AI application, you will need to create an account with OpenAI to generate an API key. The steps below outline this setup process:
+    $ npm run build
 
-<details closed><summary>OpenAI API User Guide</summary>
+6. With these steps completed, Bimbus will be successfully installed and built, empowering you to effortlessly generate comprehensive documentation for your code files.
+
+OpenAI API
+------------
+
+To use Bimbus AI, you will need to create an account with OpenAI to generate an API key. The steps below outline this setup process:
 
 1. Go to the [OpenAI website](https://platform.openai.com/).
 2. Click the "Sign up for free" button.
@@ -56,38 +62,46 @@ To use the README-AI application, you will need to create an account with OpenAI
 5. Follow the instructions to create a new API key.
 6. Copy the API key and keep it in a secure place.
 
-</details>
-<br>
-
 Usage
 -----
 
 To generate documentation using Bimbus, run the following command:
 
-    $ node dist/index.js -t <OpenAI Access Token> -i <input-file-path> [-o <output-file-directory>]
-    
+    $ node dist/index.js -t <OpenAI Access Token> -i <input-file-path> [-o <output-file-directory>] [-f <filetype>] [-v] [-h]
 
 The command accepts the following arguments:
 
 *   `-t` or `--token`: Specifies the OpenAI Access Token.
 *   `-i` or `--input`: Specifies the path to the input file containing code to generate documentation for.
 *   `-o` or `--output` (optional): Specifies the output directory where the generated documentation will be saved. If not provided, the documentation will be saved in the current working directory.
+*   `-f` or `--filetype` (optional): Specifies the output file type for the generated documentation (default: markdown).
+*   `-v` or `--verbose` (optional): Enables verbose output for detailed information (default: false).
+*   `-h` or `--help`: Displays the help message for Bimbus.
 
 Examples
 --------
 
-Here are a few examples demonstrating the usage of Bimbus:
+The following are some examples on how to run Bimbus.
 
-    $ bimbus -t your-access-token -i /path/to/code.php
-    
+Basic usage:
 
-    $ bimbus -t your-access-token -i /path/to/code.ts -o /path/to/output/directory
-    
+    $ node dist/index.js -t <OpenAI Access Token> -i path/to/code/file.js
 
-Additional Resources
---------------------
+Specifying an output directory:
 
-For more information on how to use Bimbus and customize its behavior, refer to the [Bimbus Documentation](https://link-to-bimbus-documentation).
+    $ node dist/index.js -t <OpenAI Access Token> -i path/to/code/file.py -o output/docs/
+
+Customizing the output file type:
+
+    $ node dist/index.js -t <OpenAI Access Token> -i path/to/code/file.ts -f html
+
+Enabling verbose output:
+
+    $ node dist/index.js -t <OpenAI Access Token> -i path/to/code/file.py -v
+
+Displaying help message:
+
+    $ node dist/index.js --help
 
 Contributions and Issues
 ------------------------
@@ -97,6 +111,6 @@ We welcome contributions and feedback! If you encounter any issues or have sugge
 License
 -------
 
-Bimbus is released under the [MIT License](https://link-to-license).
+Bimbus is released under the [MIT License](https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/LICENSE).
 
 📝👩‍💻 Happy documenting with Bimbus!
