@@ -122,7 +122,7 @@ async function main ( ) {
 
   // Generate a series of prompts to send to the Open AI API
   const prompts : { [ id : string ] : string } = {
-      "General" : "You will be provided code from the file '"+inputBaseName+"'. Summarise and produce an introduction of '"+inputBaseName+"'. Use a confident tone and respond with a single sentence.\n"+input+"\n",
+      "Introduction" : "You will be provided code from the file '"+inputBaseName+"'. Summarise and produce an introduction of '"+inputBaseName+"'. Use a confident tone and respond with a single sentence.\n"+input+"\n",
       "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Use a confident tone and respond in a few sentences.\n"+input+"\n",
       "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Use a confident tone and respond in a few paragraphs.\n"+input+"\n",
       "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' from a technical perspective. Use a confident tone and respond in a a few sentences.\n"+input+"\n",
