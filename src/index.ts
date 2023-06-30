@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 const { Command } = require("commander");
 const fs = require("fs");
 const path = require("path");
@@ -83,3 +85,4 @@ if (options.touch) {
 if (!process.argv.slice(2).length) {
   program.outputHelp();
 }
+
