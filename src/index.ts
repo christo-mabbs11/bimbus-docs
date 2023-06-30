@@ -9,6 +9,7 @@ const fs = require("fs");
 const path = require("path");
 const figlet = require("figlet");
 const { Configuration, OpenAIApi } = require("openai");
+const Docxtemplater = require('docxtemplater');
 
 /////////////////////////
 // Main Functionality //
@@ -57,9 +58,9 @@ async function main ( ) {
   }
 
   // If outputType is specified, ensure it is valid
-  // Valid values are markdown, html and txt
+  // Valid values are markdown, docx and txt
   if (options.filetype) {
-    if (options.filetype !== "markdown" && options.filetype !== "html" && options.filetype !== "text") {
+    if (options.filetype !== "markdown" && options.filetype !== "docx" && options.filetype !== "text") {
       errorAndExit("Error: Invalid output type specified");
     }
   }
@@ -187,8 +188,8 @@ function writeOutputToFile ( outputDir: string, outputType: string, output: { [ 
   let fileExtension = "";
   if (outputType === "markdown") {
     fileExtension = ".md";
-  } else if (outputType === "html") {
-    fileExtension = ".html";
+  } else if (outputType === "docx") {
+    fileExtension = ".docx";
   } else if (outputType === "text") {
     fileExtension = ".txt";
   }
@@ -200,7 +201,20 @@ function writeOutputToFile ( outputDir: string, outputType: string, output: { [ 
   let outputText = "";
   if (outputType === "markdown") {
 
-  } else if (outputType === "html") {
+    // Loop through the output and add it to the outputText
+    for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
+      let key = Object.keys(output)[i1];
+      outputText += "# " + key + "\n";
+      outputText += output[key] + "\n\n";
+    }
+
+    // Write the output to a file
+    fs.writeFileSync(fullFilePath, outputText);
+
+  } else if (outputType === "docx") {
+
+    // Create a new docx document
+    var doc = new Docxtemplater();
 
   } else if (outputType === "text") {
 
