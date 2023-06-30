@@ -42,7 +42,7 @@ To install Bimbus and its dependencies, follow these simple steps:
 3. Navigate to the downloaded repository directory.
 4. Run the following command to install the required dependencies:
 ```
-$ npm install
+    $ npm install
 ```
 5. Once the dependencies are installed, proceed with building the app by running the following command:
 ```
@@ -66,9 +66,9 @@ Usage
 -----
 
 To generate documentation using Bimbus, run the following command:
-
+```
     $ node dist/index.js -t <OpenAI Access Token> -i <input-file-path> [-o <output-file-directory>] [-f <filetype>] [-v] [-h]
-
+```
 The command accepts the following arguments:
 
 *   `-t` or `--token`: Specifies the OpenAI Access Token.
@@ -84,29 +84,34 @@ Examples
 The following are some examples on how to run Bimbus.
 
 Basic usage:
-
+```
     $ node dist/index.js -t <OpenAI Access Token> -i path/to/code/file.js
+```
 
 Specifying an output directory:
-
+```
     $ node dist/index.js -t <OpenAI Access Token> -i path/to/code/file.py -o output/docs/
+```
 
 Customizing the output file type:
-
+```
     $ node dist/index.js -t <OpenAI Access Token> -i path/to/code/file.ts -f html
+```
 
 Enabling verbose output:
-
+```
     $ node dist/index.js -t <OpenAI Access Token> -i path/to/code/file.py -v
+```
 
 Displaying help message:
-
+```
     $ node dist/index.js --help
+```
 
 Contributions and Issues
 ------------------------
 
-We welcome contributions and feedback! If you encounter any issues or have suggestions for improvements, please submit them in the [Issue Tracker](https://link-to-issue-tracker). Pull requests are also welcome.
+We welcome contributions and feedback! If you encounter any issues or have suggestions for improvements, please submit them in the [Issue Tracker](https://github.com/bitgangstudio/bimbus-cli/issues). Pull requests are also welcome.
 
 License
 -------
