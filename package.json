@@ -19,10 +19,12 @@
   "homepage": "https://github.com/bitgangstudio/bimbus-cli#readme",
   "dependencies": {
     "commander": "^11.0.0",
-    "figlet": "^1.6.0"
+    "figlet": "^1.6.0",
+    "gulp-typescript": "^6.0.0-alpha.1"
   },
   "devDependencies": {
     "@types/node": "^20.3.2",
+    "gulp": "^4.0.2",
     "typescript": "^5.1.6"
   }
 }

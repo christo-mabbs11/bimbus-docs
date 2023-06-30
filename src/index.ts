@@ -42,6 +42,7 @@ const options = program.opts( );
 if (!process.argv.slice(2).length) {
   console.error("No options specified!");
   program.outputHelp();
+  process.exit(1);
 }
 
 // If the input file is not specified, show an error and print the help
