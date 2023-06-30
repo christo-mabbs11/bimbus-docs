@@ -38,7 +38,7 @@ Usage
 
 To generate documentation using Bimbus, run the following command:
 
-    $ bimbus -t <OpenAI Access Token> -i <input-file-path> [-o <output-file-directory>]
+    $ node dist/index.js -t <OpenAI Access Token> -i <input-file-path> [-o <output-file-directory>]
     
 
 The command accepts the following arguments:
