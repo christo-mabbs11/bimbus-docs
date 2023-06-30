@@ -42,7 +42,7 @@ To install Bimbus and its dependencies, follow these simple steps:
 3. Navigate to the downloaded repository directory.
 4. Run the following command to install the required dependencies:
 ```
-    $ npm install
+$ npm install
 ```
 5. Once the dependencies are installed, proceed with building the app by running the following command:
 ```
