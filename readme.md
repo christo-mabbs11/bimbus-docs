@@ -20,7 +20,7 @@
 Overview
 -------------------
 
-Code Documentation Made Easy. Bimbus is a sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. Effortlessly generate thorough and comprehensive documentation for your code files. Works for all all file types and projects.
+Code Documentation Made Easy. Bimbus is a sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. Effortlessly generate thorough and comprehensive documentation for your code files. Works for all file types and projects.
 
 System Requirements
 -------------------
