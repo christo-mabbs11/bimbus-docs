@@ -110,7 +110,12 @@ async function main ( ) {
   console.log("Generating Documentation..\n");
 
   // Fetch the contents of the input file
-  const input = fs.readFileSync(inputFile, "utf8");
+  let input = fs.readFileSync(inputFile, "utf8");
+
+  // If we have over 300 lines on input, only use the first 300
+  if (input.split("\n").length > 300) {
+    input = input.split("\n").slice(0,300).join("\n");
+  }
 
   // Fetch the base name for the input file
   const inputBaseName = path.basename(inputFile);
@@ -129,7 +134,7 @@ async function main ( ) {
   // Loop through the prompts and generate the responses
   for (let i1 = 0 ; i1 < Object.keys(prompts).length ; i1++ ) {
     let key = Object.keys(prompts)[i1];
-    replies[key] = await openAIChatCompletions( openAIToken, prompts[key] );
+    replies[key] = await openAIChatCompletions( openAIToken, prompts[key], options.verbose );
   }
 
   // Info output
@@ -155,7 +160,7 @@ function errorAndExit ( message: string ) {
 }
 
 // Function that calls the open AI chat completions API endpoint
-async function openAIChatCompletions( token: string, prompt: string ) : Promise<string> {
+async function openAIChatCompletions( token: string, prompt: string, verbose : boolean ) : Promise<string> {
 
   const configuration = new Configuration({
     apiKey: token,
@@ -168,6 +173,15 @@ async function openAIChatCompletions( token: string, prompt: string ) : Promise<
     temperature: 0.05,
 
   });
+
+  // If verbose is enabled, print the details
+  if (verbose) {
+
+    // Print the tokens processed
+    let tokensProcessed = chatCompletion.data.usage.total_tokens;
+    console.log("Tokens Processed:", tokensProcessed);
+
+  }
 
   // Fetch the reply
   const reply = chatCompletion.data.choices[0].message.content;
