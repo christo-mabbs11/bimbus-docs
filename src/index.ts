@@ -60,7 +60,7 @@ async function main ( ) {
   // If outputType is specified, ensure it is valid
   // Valid values are markdown, docx and txt
   if (options.filetype) {
-    if (options.filetype !== "markdown" && options.filetype !== "docx" && options.filetype !== "text") {
+    if (options.filetype !== "markdown" && options.filetype !== "docx" && options.filetype !== "text" && options.filetype !== "html") {
       errorAndExit("Error: Invalid output type specified");
     }
   }
@@ -209,6 +209,8 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
     fileExtension = ".docx";
   } else if (outputType === "text") {
     fileExtension = ".txt";
+  } else if (outputType === "html") {
+    fileExtension = ".html";
   }
 
   // Create the full directory path and file name, including the extension
@@ -281,6 +283,21 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
       let key = Object.keys(output)[i1];
       outputText += key + "\n";
       outputText += output[key] + "\n\n";
+    }
+
+    // Write the output to a file
+    fs.writeFileSync(fullFilePath, outputText);
+
+  } else if (outputType === "html") {
+
+    // Info output
+    console.log("Generating HTML file..\n");
+
+    // Loop through the output and add it to the outputText
+    for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
+      let key = Object.keys(output)[i1];
+      outputText += "<h1>" + key + "</h1>\n";
+      outputText += "<p>" + output[key] + "</p>\n\n";
     }
 
     // Write the output to a file
