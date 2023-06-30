@@ -56,9 +56,11 @@ To use Bimbus AI, you will need to create an account with OpenAI to generate an 
 
 To generate documentation using Bimbus, run the following command:
 ```
- $ node dist/index.js -t <openai_access_token> -i <input_file_path> \
-            [-o <output_file_directory>] [-f <filetype>] \
-            [-v] [-h]
+ $ node dist/index.js -t <openai_access_token>
+                      -i <input_file_path> \
+                      [-o <output_file_directory>] \
+                      [-f <filetype>] \
+                      [-v] [-h]
 ```
 The command accepts the following arguments:
 
