@@ -122,10 +122,10 @@ async function main ( ) {
 
   // Generate a series of prompts to send to the Open AI API
   const prompts : { [ id : string ] : string } = {
-      "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on what you believe the purpose of the code is. Use a confident tone and respond in a single sentence.\n"+input+"\n",
-      "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on what you believe the purpose of the code is. Use a confident tone and respond in a single paragraph.\n"+input+"\n",
-      "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single sentence.\n"+input+"\n",
-      "Technical Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single paragraph.\n"+input+"\n",
+      "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code and what it is used for. Use a confident tone and respond in a a few sentences.\n"+input+"\n",
+      "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code and what it is used for. Use a confident tone and respond in a few paragraphs.\n"+input+"\n",
+      "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a a few sentences.\n"+input+"\n",
+      "Technical Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a few paragraphs.\n"+input+"\n",
   };
 
   // Used to hold the replies
