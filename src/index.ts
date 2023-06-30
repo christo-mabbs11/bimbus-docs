@@ -9,7 +9,7 @@ const fs = require("fs");
 const path = require("path");
 const figlet = require("figlet");
 const { Configuration, OpenAIApi } = require("openai");
-const Docxtemplater = require('docxtemplater');
+import { Document, Packer, Paragraph, TextRun } from "docx";
 
 /////////////////////////
 // Main Functionality //
@@ -119,7 +119,7 @@ async function main ( ) {
   const prompts : { [ id : string ] : string } = {
       "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on what you believe the purpose of the code is. Use a confident tone and respond in a single sentence.\n"+input+"\n",
       // "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on what you believe the purpose of the code is. Use a confident tone and respond in a single paragraph.\n"+input+"\n",
-      "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single sentence.\n"+input+"\n",
+      // "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single sentence.\n"+input+"\n",
       // "Technical Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single paragraph.\n"+input+"\n",
   };
 
@@ -132,8 +132,11 @@ async function main ( ) {
     replies[key] = await openAIChatCompletions( openAIToken, prompts[key] );
   }
 
+  // Info output
+  console.log("Writing Output..\n");
+
   // Write the output to a file
-  writeOutputToFile( outputDir, outputType, replies, inputBaseName );
+  await writeOutputToFile( outputDir, outputType, replies, inputBaseName );
 
   // Info output
   console.log("Done!");
@@ -175,7 +178,7 @@ async function openAIChatCompletions( token: string, prompt: string ) : Promise<
 }
 
 // Function to take the output and write it to a file
-function writeOutputToFile ( outputDir: string, outputType: string, output: { [ id : string ] : string }, originalFileName: string ) {
+async function writeOutputToFile ( outputDir: string, outputType: string, output: { [ id : string ] : string }, originalFileName: string ) {
 
   // Replace .'s with -'s in the originalFileName
   originalFileName = originalFileName.replace(/\./g, "-");
@@ -201,6 +204,9 @@ function writeOutputToFile ( outputDir: string, outputType: string, output: { [ 
   let outputText = "";
   if (outputType === "markdown") {
 
+    // Info output
+    console.log("Writing Markdown Output..\n");
+
     // Loop through the output and add it to the outputText
     for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
       let key = Object.keys(output)[i1];
@@ -213,10 +219,48 @@ function writeOutputToFile ( outputDir: string, outputType: string, output: { [ 
 
   } else if (outputType === "docx") {
 
-    // Create a new docx document
-    var doc = new Docxtemplater();
+    // Info output
+    console.log("Generating DOCX file..\n");
+
+    // Create the paragraphs
+    const paragraphs = [ ];
+    for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
+      let key = Object.keys(output)[i1];
+      paragraphs.push(new Paragraph({
+        children: [
+          new TextRun({
+            text: key,
+            bold: true,
+          }),
+          new TextRun({
+            text: "\n\n",
+          }),
+          new TextRun({
+            text: output[key],
+          }),
+          new TextRun({
+            text: "\n\n",
+          }),
+        ],
+      }));
+    }
+
+    // Create the document
+    const doc = new Document({
+      sections: [{
+        children: paragraphs,
+      }],
+    });
+
+    // Used to export the file into a .docx file
+    Packer.toBuffer(doc).then((buffer) => {
+      fs.writeFileSync(fullFilePath, buffer);
+    });
 
   } else if (outputType === "text") {
+
+    // Info output
+    console.log("Generating TXT file..\n");
 
     // Loop through the output and add it to the outputText
     for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {

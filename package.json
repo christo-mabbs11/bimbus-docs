@@ -19,7 +19,7 @@
   "homepage": "https://github.com/bitgangstudio/bimbus-cli#readme",
   "dependencies": {
     "commander": "^11.0.0",
-    "docxtemplater": "^3.37.11",
+    "docx": "^8.2.0",
     "figlet": "^1.6.0",
     "gulp-typescript": "^6.0.0-alpha.1",
     "openai": "^3.3.0"
