@@ -33,6 +33,7 @@ async function main ( ) {
     .option("-t --token [value]", "Open AI Access Token")
     .option("-i --input [value]", "Input File")
     .option("-o --output [value]", "Output Directory")
+    .option("-f --filetype [value]", "Output File Type")
     .option("-v --verbose", "Verbose Output")
     // Final processing
     .parse(process.argv);
@@ -42,28 +43,34 @@ async function main ( ) {
 
   // If the -h flag is specified, print the help and exit
   if (options.help) {
-    program.help( );
-    process.exit(0);
+    errorAndExit("");
   }
 
   // If the token is not specified, show an error and print the help
   if (!options.token) {
-    console.error("Error: Please specify an Open AI token using -t\n");
-    console.error("Run 'bimbus -h' for help\n");
-    process.exit(1);
+    errorAndExit("Error: Please specify an Open AI token using -t\n");
   }
 
   // If the input file is not specified, show an error and print the help
   if (!options.input) {
-    console.error("Error: Please specify an input file using -i\n");
-    console.error("Run 'bimbus -h' for help\n");
-    process.exit(1);
+    errorAndExit("Error: Please specify an input file using -i");
+  }
+
+  // If outputType is specified, ensure it is valid
+  // Valid values are markdown, html and txt
+  if (options.filetype) {
+    if (options.filetype !== "markdown" && options.filetype !== "html" && options.filetype !== "text") {
+      errorAndExit("Error: Invalid output type specified");
+    }
   }
 
   // Fetch the input vars
   const openAIToken = options.token;
   const inputFile = options.input;
   const outputDir = options.output ? options.output : __dirname;
+
+  // If no output type is specified, default to markdown
+  const outputType = options.filetype ? options.filetype : "markdown";
 
   // Info output
   console.log("Running Bimbus AI..\n");
@@ -93,6 +100,11 @@ async function main ( ) {
     errorAndExit("Error: Output directory does not exist");
   }
 
+  // Ensure the output directory is a directory and not a file
+  if ( !fs.lstatSync(outputDir).isDirectory( ) ) {
+    errorAndExit("Error: Output directory is not a directory");
+  }
+
   // Info output
   console.log("Generating Documentation..\n");
 
@@ -104,10 +116,10 @@ async function main ( ) {
 
   // Generate a series of prompts to send to the Open AI API
   const prompts : { [ id : string ] : string } = {
-      "summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on what you believe the purpose of the code is. Use a confident tone and respond in a single sentence.\n"+input+"\n",
-      "details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on what you believe the purpose of the code is. Use a confident tone and respond in a single paragraph.\n"+input+"\n",
-      "technical-summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single sentence.\n"+input+"\n",
-      "technical-details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single paragraph.\n"+input+"\n",
+      "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on what you believe the purpose of the code is. Use a confident tone and respond in a single sentence.\n"+input+"\n",
+      // "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on what you believe the purpose of the code is. Use a confident tone and respond in a single paragraph.\n"+input+"\n",
+      "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single sentence.\n"+input+"\n",
+      // "Technical Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a single paragraph.\n"+input+"\n",
   };
 
   // Used to hold the replies
@@ -118,6 +130,9 @@ async function main ( ) {
     let key = Object.keys(prompts)[i1];
     replies[key] = await openAIChatCompletions( openAIToken, prompts[key] );
   }
+
+  // Write the output to a file
+  writeOutputToFile( outputDir, outputType, replies, inputBaseName );
 
   // Info output
   console.log("Done!");
@@ -155,6 +170,51 @@ async function openAIChatCompletions( token: string, prompt: string ) : Promise<
 
   // return the reply
   return reply;
+
+}
+
+// Function to take the output and write it to a file
+function writeOutputToFile ( outputDir: string, outputType: string, output: { [ id : string ] : string }, originalFileName: string ) {
+
+  // Replace .'s with -'s in the originalFileName
+  originalFileName = originalFileName.replace(/\./g, "-");
+
+  // Produce the final output file name
+  let currentDate = new Date( ).toISOString( ).slice(0,10);
+  let outputFileName = originalFileName + "--" + currentDate;
+
+  // Create the file extension based on the output type
+  let fileExtension = "";
+  if (outputType === "markdown") {
+    fileExtension = ".md";
+  } else if (outputType === "html") {
+    fileExtension = ".html";
+  } else if (outputType === "text") {
+    fileExtension = ".txt";
+  }
+
+  // Create the full directory path and file name, including the extension
+  let fullFilePath = path.join(outputDir, outputFileName + fileExtension);
+
+  // Create different output based on the output type and save it
+  let outputText = "";
+  if (outputType === "markdown") {
+
+  } else if (outputType === "html") {
+
+  } else if (outputType === "text") {
+
+    // Loop through the output and add it to the outputText
+    for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
+      let key = Object.keys(output)[i1];
+      outputText += key + "\n";
+      outputText += output[key] + "\n\n";
+    }
+
+    // Write the output to a file
+    fs.writeFileSync(fullFilePath, outputText);
+
+  }
 
 }
 
