@@ -122,10 +122,10 @@ async function main ( ) {
 
   // Generate a series of prompts to send to the Open AI API
   const prompts : { [ id : string ] : string } = {
-      "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code and what it is used for. Use a confident tone and respond in a a few sentences.\n"+input+"\n",
-      "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code and what it is used for. Use a confident tone and respond in a few paragraphs.\n"+input+"\n",
-      "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a a few sentences.\n"+input+"\n",
-      "Technical Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of the code from a technical perspective. Use a confident tone and respond in a few paragraphs.\n"+input+"\n",
+      "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Use a confident tone and respond in a a few sentences.\n"+input+"\n",
+      "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Use a confident tone and respond in a few paragraphs.\n"+input+"\n",
+      "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' from a technical perspective. Use a confident tone and respond in a a few sentences.\n"+input+"\n",
+      "Technical Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' from a technical perspective. Use a confident tone and respond in a few paragraphs.\n"+input+"\n",
   };
 
   // Used to hold the replies
@@ -170,7 +170,7 @@ async function openAIChatCompletions( token: string, prompt: string, verbose : b
   const chatCompletion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [{role: "user", content: prompt}],
-    temperature: 0.05,
+    temperature: 0.1,
 
   });
 
