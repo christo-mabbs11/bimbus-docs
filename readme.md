@@ -6,7 +6,7 @@
             <br/>
             Bimbus AI
         </h1>
-        <p><strong>Automated Code Documentation</strong></p>
+        <h3><strong>Automated Code Documentation</strong></h3>
         <p><strong>Developed using OpenAI's GPT language model APIs</strong></p>
         <p align="center">
             <img src="https://img.shields.io/badge/Markdown-000000.svg?stylee&logo=Markdown&logoColor=white" alt="Markdown" />
