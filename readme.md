@@ -17,18 +17,18 @@
     </div>
 </body>
 
-Overview
+Overview 📖
 -------------------
 
 Code Documentation Made Easy. Bimbus is a sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. Effortlessly generate thorough and comprehensive documentation for your code files. Works for all file types and projects.
 
-System Requirements
+System Requirements ⚙️
 -------------------
 
 *   Node.js (v14 or higher)
 *   npm (v18 or higher)
 
-Installation
+Installation 🚀
 ------------
 
 ```
@@ -38,7 +38,7 @@ Installation
  $ npm run build
 ```
 
-OpenAI API
+OpenAI API 💻
 ------------
 
 To use Bimbus AI, you will need to create an account with OpenAI to generate an API key. The steps below outline this setup process:
@@ -50,7 +50,7 @@ To use Bimbus AI, you will need to create an account with OpenAI to generate an 
 5. Follow the instructions to create a new API key.
 6. Copy the API key and keep it in a secure place.
 
-Usage
+Usage 📝
 -----
 
 To generate documentation using Bimbus, run the following command:
@@ -68,7 +68,7 @@ The command accepts the following arguments:
 *   `-v` or `--verbose` (optional): Enables verbose output for detailed information (default: false).
 *   `-h` or `--help`: Displays the help message for Bimbus.
 
-Examples
+Examples 🌟
 --------
 
 The following are some examples on how to run Bimbus.
@@ -98,14 +98,14 @@ Displaying help message:
  $ node dist/index.js --help
 ```
 
-Contributions and Issues
+Contributions and Issues 🤝 🔧
 ------------------------
 
 We welcome contributions and feedback! If you encounter any issues or have suggestions for improvements, please submit them in the [Issue Tracker](https://github.com/bitgangstudio/bimbus-cli/issues). Pull requests are also welcome.
 
-License
+License 📄
 -------
 
 Bimbus is released under the [MIT License](https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/LICENSE).
 
-📝👩‍💻 Happy documenting with Bimbus!
+👩‍💻 Happy documenting with Bimbus!
