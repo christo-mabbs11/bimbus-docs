@@ -31,8 +31,6 @@ System Requirements
 Installation
 ------------
 
-Install with ease:
-
 ```
     $ git clone https://github.com/bitgangstudio/bimbus-cli.git
     $ cd bimbus-cli
