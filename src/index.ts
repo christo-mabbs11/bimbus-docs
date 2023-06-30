@@ -52,34 +52,24 @@ if (!options.input) {
   process.exit(1);
 }
 
-// Process the options
-/*
-if (options.token) {
-  // ...
-}
-if (options.input) {
-  // ...
-}
-if (options.output) {
-  // ...
-}
-if (options.ls) {
-  const filepath = typeof options.ls === "string" ? options.ls : __dirname;
-  listDirContents(filepath);
-}
-if (options.mkdir) {
-  createDir(path.resolve(__dirname, options.mkdir));
-}
-if (options.touch) {
-  createFile(path.resolve(__dirname, options.touch));
-}
-*/
+// Fetch the input vars
+const openAIToken = options.token;
+const inputFile = path.basename(options.input);
+const outputDir = options.output ? options.output : __dirname;
+
+// Debug
+console.log("Open AI Token: ", openAIToken);
+console.log("Input File: ", inputFile);
+console.log("Output Directory: ", outputDir);
+process.exit(1);
 
 //////////////////////////////////
 // Library of helper functions //
 ////////////////////////////////
 
 // Function to list the contents of a directory
+// const filepath = typeof options.ls === "string" ? options.ls : __dirname;
+// listDirContents(filepath);
 async function listDirContents(filepath: string) {
   try {
     const files = await fs.promises.readdir(filepath);
@@ -96,6 +86,7 @@ async function listDirContents(filepath: string) {
 }
 
 // Function to create a directory
+// createDir(path.resolve(__dirname, options.mkdir));
 function createDir(filepath: string) {
   if (!fs.existsSync(filepath)) {
     fs.mkdirSync(filepath);
@@ -104,6 +95,7 @@ function createDir(filepath: string) {
 }
 
 // Functio to create a file
+createFile(path.resolve(__dirname, options.touch));
 function createFile(filepath: string) {
   fs.openSync(filepath, "w");
   console.log("An empty file has been created");
