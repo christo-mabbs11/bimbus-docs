@@ -20,14 +20,10 @@
 Overview
 -------------------
 
-A sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. With Bimbus, effortlessly generate thorough and comprehensive documentation for your code files, whether it's PHP, TypeScript, or more.
-
-Enhance understanding and maintainability of your codebase with ease, empowering collaboration and onboarding. Streamline your development process and unlock the full potential of your code, as Bimbus becomes your trusted ally in the pursuit of code documentation excellence.
+Code Documentation Made Easy. Bimbus is a sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. Effortlessly generate thorough and comprehensive documentation for your code files, whether it's PHP, TypeScript, or more.
 
 System Requirements
 -------------------
-
-To use Bimbus, ensure that you have the following system requirements:
 
 *   Node.js (v14 or higher)
 *   npm (v18 or higher)
@@ -35,22 +31,12 @@ To use Bimbus, ensure that you have the following system requirements:
 Installation
 ------------
 
-To install Bimbus and its dependencies:
+Install with ease:
 
-1. Download the Bimbus repository.
 ```
     $ git clone https://github.com/bitgangstudio/bimbus-cli.git
-```
-2. Navigate to the downloaded repository directory.
-```
     $ cd bimbus-cli
-```
-4. Run the following command to install the required dependencies:
-```
     $ npm install
-```
-5. Once the dependencies are installed, proceed with building the app by running the following command:
-```
     $ npm run build
 ```
 
@@ -71,7 +57,7 @@ Usage
 
 To generate documentation using Bimbus, run the following command:
 ```
-    $ node dist/index.js -t <OpenAI Access Token> -i <input-file-path> [-o <output-file-directory>] [-f <filetype>] [-v] [-h]
+$ node dist/index.js -t <OpenAI Access Token> -i <input-file-path> [-o <output-file-directory>] [-f <filetype>] [-v] [-h]
 ```
 The command accepts the following arguments:
 
