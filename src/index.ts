@@ -223,10 +223,13 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
     // Info output
     console.log("Writing Markdown Output..\n");
 
+    // Add the title to the output
+    outputText += "# " + originalFileName + " Documentation\n\n";
+
     // Loop through the output and add it to the outputText
     for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
       let key = Object.keys(output)[i1];
-      outputText += "# " + key + "\n";
+      outputText += "## " + key + "\n";
       outputText += output[key] + "\n\n";
     }
 
@@ -278,6 +281,9 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
     // Info output
     console.log("Generating TXT file..\n");
 
+    // Add the title to the output
+    outputText += originalFileName + " Documentation\n\n";
+
     // Loop through the output and add it to the outputText
     for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
       let key = Object.keys(output)[i1];
@@ -293,10 +299,13 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
     // Info output
     console.log("Generating HTML file..\n");
 
+    // Add the title to the output
+    outputText += "<h1>" + originalFileName + " Documentation</h1>\n\n";
+
     // Loop through the output and add it to the outputText
     for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
       let key = Object.keys(output)[i1];
-      outputText += "<h1>" + key + "</h1>\n";
+      outputText += "<h2>" + key + "</h2>\n";
       outputText += "<p>" + output[key] + "</p>\n\n";
     }
 
