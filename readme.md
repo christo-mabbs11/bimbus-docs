@@ -8,7 +8,6 @@
         </h1>
         <p><strong>Code Documentation Made Simple</strong></p>
         <p><strong>Developed using OpenAI's GPT language model APIs</strong></p>
-        <br>
         <p align="center">
             <img src="https://img.shields.io/badge/Markdown-000000.svg?stylee&logo=Markdown&logoColor=white" alt="Markdown" />
             <img src="https://img.shields.io/badge/Node.js-339933.svg?style=flat&logo=node.js&logoColor=white" alt="Node JS" />
