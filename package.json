@@ -1,18 +1,22 @@
 {
-  "name": "thor-cli",
+  "name": "@bitgangstudio/bimbus-cli",
   "version": "1.0.0",
-  "description": "",
+  "description": "A CLI for generating code documentation.",
   "main": "dist/index.js",
   "bin": {
     "bimbus": "./dist/index.js"
   },
   "scripts": {
-    "build": "npx tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "cli",
+    "npmtool"
+  ],
+  "author": "Bit Gang Studio",
   "license": "ISC",
+  "repository": "https://github.com/bitgangstudio/bimbus-cli",
+  "homepage": "https://github.com/bitgangstudio/bimbus-cli#readme",
   "dependencies": {
     "commander": "^11.0.0",
     "figlet": "^1.6.0"
