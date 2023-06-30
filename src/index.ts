@@ -79,3 +79,7 @@ if (options.touch) {
   createFile(path.resolve(__dirname, options.touch));
 }
 
+// Print the help if no options are passed
+if (!process.argv.slice(2).length) {
+  program.outputHelp();
+}
