@@ -3,15 +3,6 @@ Bimbus 📚🚀
 
 Bimbus is a command line tool built with Node.js that leverages OpenAI technology to generate thorough documentation for code files, such as .php, .ts, and more. With Bimbus, you can easily generate comprehensive documentation to enhance the understanding and maintainability of your codebase.
 
-⚠️ Code in Production ⚠️
--------------------
-
-Please note that the code report feature is still in active development and is not yet ready for production usage. While the core functionality of Bimbus is operational, the code report generation is currently being fine-tuned and improved. We appreciate your understanding as we work diligently to provide you with a robust and reliable code documentation tool.
-
-Feel free to explore and utilize the existing functionality of Bimbus, but be aware that the code report feature may not produce optimal results at this stage. We highly value your feedback and suggestions to further enhance the code report capabilities.
-
-Stay tuned for future updates and releases as we continue to refine and expand the code report functionality in Bimbus.
-
 System Requirements
 -------------------
 
