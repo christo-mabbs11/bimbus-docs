@@ -29,7 +29,7 @@ async function main ( ) {
   program
     // Program Details
     .version("1.0.0")
-    .description("An example CLI for managing a directory")
+    .description("Bimbus AI is a tool that uses Open AI to generate documentation for code files")
     // Bimbus AI Functions
     .option("-t --token [value]", "Open AI Access Token")
     .option("-i --input [value]", "Input File")
