@@ -232,11 +232,11 @@ async function openAIChatCompletions( token: string, prompt: string, verbose : b
 async function writeOutputToFile ( outputDir: string, outputType: string, output: { [ id : string ] : string }, originalFileName: string ) {
 
   // Replace .'s with -'s in the originalFileName
-  originalFileName = originalFileName.replace(/\./g, "-");
+  let updatedFileName = originalFileName.replace(/\./g, "-");
 
   // Produce the final output file name
   let currentDate = new Date( ).toISOString( ).slice(0,10);
-  let outputFileName = originalFileName + "--" + currentDate;
+  let outputFileName = updatedFileName + "--" + currentDate;
 
   // Create the file extension based on the output type
   let fileExtension = "";
