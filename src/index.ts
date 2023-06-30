@@ -1,9 +1,17 @@
 #! /usr/bin/env node
 
+//////////////////////////
+// Import Dependencies //
+////////////////////////
+
 const { Command } = require("commander");
 const fs = require("fs");
 const path = require("path");
 const figlet = require("figlet");
+
+/////////////////////////
+// Main Functionality //
+///////////////////////
 
 // Create a new program
 const program = new Command( );
@@ -28,7 +36,47 @@ program
   .parse(process.argv);
 
 // Fetch the options
-const options = program.opts();
+const options = program.opts( );
+
+// If not options are specified, show an error and print the help
+if (!process.argv.slice(2).length) {
+  console.error("No options specified!");
+  program.outputHelp();
+}
+
+// If the input file is not specified, show an error and print the help
+if (!options.input) {
+  console.error("Please specify an input file");
+  program.outputHelp();
+  process.exit(1);
+}
+
+// Process the options
+/*
+if (options.token) {
+  // ...
+}
+if (options.input) {
+  // ...
+}
+if (options.output) {
+  // ...
+}
+if (options.ls) {
+  const filepath = typeof options.ls === "string" ? options.ls : __dirname;
+  listDirContents(filepath);
+}
+if (options.mkdir) {
+  createDir(path.resolve(__dirname, options.mkdir));
+}
+if (options.touch) {
+  createFile(path.resolve(__dirname, options.touch));
+}
+*/
+
+//////////////////////////////////
+// Library of helper functions //
+////////////////////////////////
 
 // Function to list the contents of a directory
 async function listDirContents(filepath: string) {
@@ -58,31 +106,5 @@ function createDir(filepath: string) {
 function createFile(filepath: string) {
   fs.openSync(filepath, "w");
   console.log("An empty file has been created");
-}
-
-// Process the options
-if (options.token) {
-  // ...
-}
-if (options.input) {
-  // ...
-}
-if (options.output) {
-  // ...
-}
-if (options.ls) {
-  const filepath = typeof options.ls === "string" ? options.ls : __dirname;
-  listDirContents(filepath);
-}
-if (options.mkdir) {
-  createDir(path.resolve(__dirname, options.mkdir));
-}
-if (options.touch) {
-  createFile(path.resolve(__dirname, options.touch));
-}
-
-// Print the help if no options are passed
-if (!process.argv.slice(2).length) {
-  program.outputHelp();
 }
 
