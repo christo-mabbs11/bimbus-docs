@@ -41,13 +41,13 @@ To install Bimbus and its dependencies, follow these simple steps:
 2. Open a terminal or command prompt.
 3. Navigate to the downloaded repository directory.
 4. Run the following command to install the required dependencies:
-
+```
     $ npm install
-
+```
 5. Once the dependencies are installed, proceed with building the app by running the following command:
-
+```
     $ npm run build
-
+```
 6. With these steps completed, Bimbus will be successfully installed and built, empowering you to effortlessly generate comprehensive documentation for your code files.
 
 OpenAI API
