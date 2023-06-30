@@ -137,7 +137,7 @@ async function main ( ) {
 
   // create a new progress bar instance and use shades_classic theme
   const progressBar = new cliProgress.SingleBar({
-    format: '🚀 Generating.. |' + colors.cyan('{bar}') + '| {percentage}% | {value}/{total} Jobs | Remaining: {speed}',
+    format: '🚀 Generating.. |' + colors.cyan('{bar}') + '| {percentage}% | {value}/{total} Jobs | Est Remaining: {speed}',
     barCompleteChar: '\u2588',
     barIncompleteChar: '\u2591',
   });
@@ -191,7 +191,7 @@ async function main ( ) {
 
 // Function to show and exit
 function errorAndExit ( message: string ) {
-  console.error(message,"\n");
+  console.error(colors.red(message),"\n");
   console.error("Run 'bimbus -h' for help\n");
   process.exit(1);
 }
