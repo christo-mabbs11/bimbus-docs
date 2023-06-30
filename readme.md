@@ -1,9 +1,9 @@
 <body>
     <div align="center">
         <h1 align="center">
-            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/bgs.png" width="42" />
-            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/bimbus.png" width="42" />
-            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/openai.png" width="42" />
+            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/bgs.png" width="45" />
+            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/bimbus.png" width="45" />
+            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/openai.png" width="45" />
             <br/>
             Bimbus AI
         </h1>
