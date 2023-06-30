@@ -35,11 +35,16 @@ To use Bimbus, ensure that you have the following system requirements:
 Installation
 ------------
 
-To install Bimbus and its dependencies, follow these simple steps:
+To install Bimbus and its dependencies:
 
 1. Download the Bimbus repository.
-2. Open a terminal or command prompt.
-3. Navigate to the downloaded repository directory.
+```
+    $ git clone https://github.com/bitgangstudio/bimbus-cli.git
+```
+2. Navigate to the downloaded repository directory.
+```
+    $ cd bimbus-cli
+```
 4. Run the following command to install the required dependencies:
 ```
     $ npm install
@@ -48,7 +53,6 @@ To install Bimbus and its dependencies, follow these simple steps:
 ```
     $ npm run build
 ```
-6. With these steps completed, Bimbus will be successfully installed and built, empowering you to effortlessly generate comprehensive documentation for your code files.
 
 OpenAI API
 ------------
