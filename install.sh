@@ -7,4 +7,4 @@ npm install
 npm run build
 
 # Install the app
-npm install -g .
+npm install --force -g .
