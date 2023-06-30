@@ -1,12 +1,12 @@
 <body>
     <div align="center">
         <h1 align="center">
-            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/bgs.png" width="80" />
-            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/openai.png" width="80" />
-            <br>Bimbus AI
+            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/bgs.png" width="38" />
+            <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/openai.png" width="38" />
+            Bimbus AI
         </h1>
-        <h3>Code Documentation Made Simple.</h3>
-        <h3>Developed using OpenAI's GPT language model APIs.</h3>
+        <p><strong>Code Documentation Made Simple</strong></p>
+        <p><strong>Developed using OpenAI's GPT language model APIs</strong></p>
         <br>
         <p align="center">
             <img src="https://img.shields.io/badge/Markdown-000000.svg?stylee&logo=Markdown&logoColor=white" alt="Markdown" />
