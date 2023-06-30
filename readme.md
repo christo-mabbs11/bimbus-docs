@@ -58,10 +58,10 @@ To generate documentation using Bimbus, run the following command:
     $ node dist/index.js \
             -t <OpenAI Access Token> \
             -i <input-file-path> \
-                    [-o <output-file-directory>] \
-                    [-f <filetype>] \
-                    [-v]  \
-                    [-h]
+            [-o <output-file-directory>] \
+            [-f <filetype>] \
+            [-v]  \
+            [-h]
 ```
 The command accepts the following arguments:
 
