@@ -115,13 +115,101 @@ async function main ( ) {
   // Fetch the contents of the input file
   let input = fs.readFileSync(inputFile, "utf8");
 
-  // If we have over 300 lines on input, only use the first 300
-  if (input.split("\n").length > 300) {
-    input = input.split("\n").slice(0,300).join("\n");
-  }
+  // Determine how many lines in the file
+  let linesCount = input.split("\n").length;
+
+  // Arrays used to keep track of different information
+  let descriptionBlocks : string[] = [ ];
+  let techDescriptionBlocks : string[] = [ ];
+  let functionBlocks : string[] = [ ];
 
   // Fetch the base name for the input file
   const inputBaseName = path.basename(inputFile);
+
+  // Loop through the code until we reach the end of the file
+  let increment = 100;
+  let counter = 0;
+  while (true) {
+
+    // Fetch the start and end index
+    let breakLoop = false;
+    let startIndex = counter * increment;
+    let endIndex = startIndex + 200;
+    if ( endIndex > linesCount ) { endIndex = linesCount; breakLoop = true; }
+
+    // Fetch the code
+    let code = input.split("\n").slice(startIndex, endIndex).join("\n");
+
+    // Add line numbers to the code
+    let codeLines = code.split("\n");
+    let codeWithLineNumbers = "";
+    for (let i1 = 0 ; i1 < codeLines.length ; i1++ ) {
+      codeWithLineNumbers += (startIndex+i1+1) + " " + codeLines[i1] + "\n";
+    }
+
+    // Fetch non-tech description
+    let prompt1 = "You will be provided a snippet of code from the file '"+inputBaseName+"' between lines "+startIndex+" and "+endIndex+".\n";
+    prompt1 += "You are taking on the role of a senior developer explaining code to a designer with no technical experience.\n";
+    prompt1 += "Explain what this code does in non-technical terms.\n";
+    prompt1 += "Include line numbers in your explanation.\n";
+    prompt1 += "Provide this information as a list that begins with dashes.\n";
+    prompt1 += "Include line numbers in your explanation.\n";
+    if (counter > 0) {
+
+      // Fetch the last 3 lines from the the descriptionBlocks
+      let last3Lines = descriptionBlocks[descriptionBlocks.length-1].split("\n").slice(-3).join("\n");
+
+      // Add the last 3 lines to the prompt
+      prompt1 += "Continue on from the three lines below.\n";
+      prompt1 += last3Lines + "\n";
+
+    }    
+    prompt1 += "\n" + codeWithLineNumbers+"\n";
+    let message1 = await openAIChatCompletions(openAIToken, prompt1, options.verbose );
+
+    // Debug
+    // console.log(prompt1);
+    // console.log(message1);
+
+    // Break the message into lines
+    let message1Lines = message1.split("\n");
+
+    // Add the message1 lines to the descriptionBlocks array
+    for (let i1 = 0 ; i1 < message1Lines.length ; i1++ ) {
+
+      // If this line is not empty
+      if (message1Lines[i1].trim( ) !== "") {
+        descriptionBlocks.push(message1Lines[i1]);
+      }
+
+    }
+
+    // Fetch the code blocks
+    // techDescriptionBlocks
+    // functionBlocks
+
+    // If break loop is true, break the loop
+    if (breakLoop) { break; }
+
+    // Increment the counter
+    counter++;
+
+  }
+
+  // Compile the description blocks into a single string
+  let descriptionBlocksString = descriptionBlocks.join("\n");
+
+  // Create prompt to summarise 
+  let prompt2 = "You will be provided information about a file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Provide only a single sentence.\n"+descriptionBlocksString+"\n";
+
+  // Fetch the summary
+  let summary = await openAIChatCompletions(openAIToken, prompt2, options.verbose );
+
+  // Quit out 
+  // console.log(descriptionBlocks);
+  console.log(prompt2);
+  console.log(summary);
+  return;
 
   // Generate a series of prompts to send to the Open AI API
   var prompts : { [ id : string ] : string } = {
