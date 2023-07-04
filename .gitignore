@@ -144,3 +144,4 @@ desktop.ini
 *-gignore*
 vendor
 out*.txt
+debug

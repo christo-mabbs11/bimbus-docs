@@ -26,7 +26,7 @@ async function main ( ) {
 
   // Print the banner
   console.log("\n");
-  console.log(figlet.textSync("Bimbus AI"));
+  console.log(figlet.textSync("BIMBUS AI"));
 
   // Define the details
   program
@@ -51,7 +51,7 @@ async function main ( ) {
   }
 
   // Info output
-  console.log("\n🔄 Processing Input..\n");
+  console.log("\n🔍 Assessing Input..\n");
 
   // If the token is not specified, show an error and print the help
   if (!options.token) {
@@ -109,6 +109,12 @@ async function main ( ) {
     errorAndExit("Error: Output directory is not a directory");
   }
 
+  // Fetch the base name for the input file
+  const inputBaseName = path.basename(inputFile);
+
+  // Info output
+  console.log("📄 Processing '"+inputBaseName+"'..\n");
+
   // Info output
   console.log("📚 Generating Documentation..\n");
 
@@ -121,10 +127,8 @@ async function main ( ) {
   // Arrays used to keep track of different information
   let descriptionBlocks : string[] = [ ];
   let techDescriptionBlocks : string[] = [ ];
+  let descriptionFunctionalBlocks : string[] = [ ];
   let functionBlocks : string[] = [ ];
-
-  // Fetch the base name for the input file
-  const inputBaseName = path.basename(inputFile);
 
   // Loop through the code until we reach the end of the file
   let increment = 100;
