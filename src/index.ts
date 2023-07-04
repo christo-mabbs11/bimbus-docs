@@ -137,8 +137,9 @@ async function main ( ) {
 
     // Fetch the start and end index
     let breakLoop = false;
-    let startIndex = counter * increment;
-    let endIndex = startIndex + 200;
+    let startIndex = counter * increment - 20;
+    let endIndex = startIndex + increment;
+    if ( startIndex < 0 ) { startIndex = 0; }
     if ( endIndex > linesCount ) { endIndex = linesCount; breakLoop = true; }
 
     // Fetch the code
@@ -151,29 +152,31 @@ async function main ( ) {
       codeWithLineNumbers += (startIndex+i1+1) + " " + codeLines[i1] + "\n";
     }
 
-    // Fetch non-tech description
+    /////////////////////////////////
+    // Fetch non-tech description //
+    ///////////////////////////////
+    
     let prompt1 = "You will be provided a snippet of code from the file '"+inputBaseName+"' between lines "+startIndex+" and "+endIndex+".\n";
     prompt1 += "You are taking on the role of a senior developer explaining code to a designer with no technical experience.\n";
-    prompt1 += "Explain what this code does in non-technical terms.\n";
+    prompt1 += "Explain what this code does at a high level in very simple, non-technical terms.\n";
     prompt1 += "Include line numbers in your explanation.\n";
-    prompt1 += "Provide this information as a list that begins with dashes.\n";
-    prompt1 += "Include line numbers in your explanation.\n";
+    prompt1 += "Provide this information as a simple list that begins with dashes and provides the line numbers at the beginning.\n";
+    prompt1 += "Use the following format:\n";
+    prompt1 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
     if (counter > 0) {
 
-      // Fetch the last 3 lines from the the descriptionBlocks
-      let last3Lines = descriptionBlocks[descriptionBlocks.length-1].split("\n").slice(-3).join("\n");
+      // Fetch the last line of the previous prompt
+      let lastLine = descriptionBlocks[descriptionBlocks.length-1];
 
-      // Add the last 3 lines to the prompt
-      prompt1 += "Continue on from the three lines below.\n";
-      prompt1 += last3Lines + "\n";
+      // Add the last line to the prompt
+      prompt1 += "Continue on from the line below.\n";
+      prompt1 += lastLine+"\n";
 
-    }    
+    }
+    prompt1 += "Remember to use the following format:\n";
+    prompt1 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
     prompt1 += "\n" + codeWithLineNumbers+"\n";
-    let message1 = await openAIChatCompletions(openAIToken, prompt1, options.verbose );
-
-    // Debug
-    // console.log(prompt1);
-    // console.log(message1);
+    let message1 = await openAIChatCompletions(openAIToken, prompt1, options.verbose, 0 );
 
     // Break the message into lines
     let message1Lines = message1.split("\n");
@@ -188,9 +191,44 @@ async function main ( ) {
 
     }
 
-    // Fetch the code blocks
-    // techDescriptionBlocks
-    // functionBlocks
+    /////////////////////////////
+    // Fetch tech description //
+    ///////////////////////////
+    
+    let prompt2 = "You will be provided a snippet of code from the file '"+inputBaseName+"' between lines "+startIndex+" and "+endIndex+".\n";
+    prompt2 += "You are taking on the role of a senior developer explaining code to another senior developer.\n";
+    prompt1 += "Explain what this code does in highly detailed, complex, technical terms.\n";
+    prompt2 += "Include line numbers in your explanation.\n";
+    prompt2 += "Provide this information as a simple list that begins with dashes and provides the line numbers at the beginning.\n";
+    prompt2 += "Use the following format:\n";
+    prompt2 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
+    if (counter > 0) {
+
+      // Fetch the last line of the previous prompt
+      let lastLine = descriptionBlocks[descriptionBlocks.length-1];
+
+      // Add the last line to the prompt
+      prompt2 += "Continue on from the line below.\n";
+      prompt2 += lastLine+"\n";
+
+    }
+    prompt2 += "Remember to use the following format:\n";
+    prompt2 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
+    prompt2 += "\n" + codeWithLineNumbers+"\n";
+    let message2 = await openAIChatCompletions(openAIToken, prompt2, options.verbose, 0 );
+
+    // Break the message into lines
+    let message2Lines = message2.split("\n");
+
+    // Add the message1 lines to the descriptionBlocks array
+    for (let i1 = 0 ; i1 < message2Lines.length ; i1++ ) {
+
+      // If this line is not empty
+      if (message2Lines[i1].trim( ) !== "") {
+        techDescriptionBlocks.push(message2Lines[i1]);
+      }
+
+    }
 
     // If break loop is true, break the loop
     if (breakLoop) { break; }
@@ -200,28 +238,15 @@ async function main ( ) {
 
   }
 
-  // Compile the description blocks into a single string
+  // Compile the description and tech description blocks into a single string
   let descriptionBlocksString = descriptionBlocks.join("\n");
-
-  // Create prompt to summarise 
-  let prompt2 = "You will be provided information about a file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Provide only a single sentence.\n"+descriptionBlocksString+"\n";
-
-  // Fetch the summary
-  let summary = await openAIChatCompletions(openAIToken, prompt2, options.verbose );
-
-  // Quit out 
-  // console.log(descriptionBlocks);
-  console.log(prompt2);
-  console.log(summary);
-  return;
+  let techDescriptionBlocksString = techDescriptionBlocks.join("\n");
 
   // Generate a series of prompts to send to the Open AI API
   var prompts : { [ id : string ] : string } = {
-      "Introduction" : "You will be provided code from the file '"+inputBaseName+"'. Summarise and produce an introduction of '"+inputBaseName+"'. Provide only a single sentence.\n"+input+"\n",
-      "Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Provide about 5 sentences.\n"+input+"\n",
-      "Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide a high level summary on the functionality of '"+inputBaseName+"' and what it is used for from a non-technical perspective. Provide about 5 paragraphs.\n"+input+"\n",
-      "Technical Summary" : "You will be provided code from the file '"+inputBaseName+"'. Provide information on the functionality of the code from '"+inputBaseName+"' from a purely technical perspective for an experienced developer. Provide about 5 sentences.\n"+input+"\n",
-      "Technical Details" : "You will be provided code from the file '"+inputBaseName+"'. Provide information on the functionality of the code from '"+inputBaseName+"' from a purely technical perspective for an experienced developer. Provide about 5 paragraphs.\n"+input+"\n",
+      "Introduction" : "You will be provided information about a file '" + inputBaseName + "' below. Summarise and produce an introduction of '" + inputBaseName + ". Mention the purpose of this file. Provide one or two sentences.\n\n" + descriptionBlocksString+"\n",
+      "Summary" : "You will be provided information about a file '" + inputBaseName + "' below. Provide a high level summary on the functionality of '" + inputBaseName + " and what it is used for from a non-technical perspective. Provide 3 or 4 paragraphs. Be sure to include an introduction.\n\n" + descriptionBlocksString+"\n",
+      "Technical Details" : "You will be provided information about a file '" + inputBaseName + "' below. Summarise an article of paragraphs on the functionality of the code from '" + inputBaseName + " from a purely technical perspective for an experienced developer. Use plain english and write a summarised article of paragraphs. Write 5 or 6 paragraphs. Make each summary paragraph 3 sentences long. Be sure to include an introduction.\n\n" + techDescriptionBlocksString+"\n",
   };
 
   // Used to hold the replies
@@ -263,6 +288,38 @@ async function main ( ) {
 
   }
 
+  // Loop through the replies object
+  for (let i1 = 0 ; i1 < Object.keys(replies).length ; i1++ ) {
+
+    // Fetch the key
+    let key = Object.keys(replies)[i1];
+
+    // If this is the 'Summary' or 'Technical Details' key
+    if (key === "Summary" || key === "Technical Details") {
+
+      // Split the file up
+      let fileLines = replies[key].split("\n");
+
+      // If there is more than 3 lines
+      if (fileLines.length > 3) {
+
+        // Remove the first paragraph
+        fileLines.splice(0,1);
+
+        // Remove the first line if it is empty
+        if (fileLines[0] === "") {
+          fileLines.splice(0,1);
+        }
+
+        // Add the file lines back to the replies object
+        replies[key] = fileLines.join("\n");
+
+      }
+
+    }
+
+  }
+
   // stop the progress bar
   progressBar.stop( );
 
@@ -289,7 +346,7 @@ function errorAndExit ( message: string ) {
 }
 
 // Function that calls the open AI chat completions API endpoint
-async function openAIChatCompletions( token: string, prompt: string, verbose : boolean ) : Promise<string> {
+async function openAIChatCompletions( token: string, prompt: string, verbose : boolean, temperature : number = 0.1 ) : Promise<string> {
 
   const configuration = new Configuration({
     apiKey: token,
@@ -299,7 +356,7 @@ async function openAIChatCompletions( token: string, prompt: string, verbose : b
   const chatCompletion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [{role: "user", content: prompt}],
-    temperature: 0.1,
+    temperature: temperature,
 
   });
 
@@ -355,7 +412,7 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
     // Loop through the output and add it to the outputText
     for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
       let key = Object.keys(output)[i1];
-      outputText += "## " + key + "\n";
+      outputText += "## " + key + "\n\n";
       outputText += output[key] + "\n\n";
     }
 
