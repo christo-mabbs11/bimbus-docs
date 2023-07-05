@@ -5,7 +5,7 @@
             <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/bimbus.png" width="45" />
             <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/openai.png" width="45" />
             <br/>
-            Bimbus AI
+            BimBus AI
         </h1>
         <h3><strong>Automated Code Documentation</strong></h3>
         <p><strong>Developed using OpenAI's GPT language model APIs</strong></p>
@@ -21,7 +21,7 @@
 📖  Overview
 -------------------
 
-Code Documentation Made Easy. Bimbus is a sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. Effortlessly generate thorough and comprehensive documentation for your code files. Works for all file types and projects.
+Code Documentation Made Easy. BimBus is a sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. Effortlessly generate thorough and comprehensive documentation for your code files. Works for all file types and projects.
 
 ⚙️  System Requirements
 -------------------
@@ -42,7 +42,7 @@ Code Documentation Made Easy. Bimbus is a sleek and powerful command line tool c
 💻  OpenAI API
 ------------
 
-To use Bimbus AI, you will need to create an account with OpenAI to generate an API key. The steps below outline this setup process:
+To use BimBus AI, you will need to create an account with OpenAI to generate an API key. The steps below outline this setup process:
 
 1. Go to the [OpenAI website](https://platform.openai.com/).
 2. Click the "Sign up for free" button.
@@ -54,7 +54,7 @@ To use Bimbus AI, you will need to create an account with OpenAI to generate an 
 📝  Usage
 -----
 
-To generate documentation using Bimbus, run the following command:
+To generate documentation using BimBus, run the following command:
 ```
  $ node dist/index.js -t <openai_access_token> \
                       -i <input_file_path> \
@@ -69,12 +69,12 @@ The command accepts the following arguments:
 *   `-o` or `--output` (optional): Specifies the output directory where the generated documentation will be saved. If not provided, the documentation will be saved in the current working directory.
 *   `-f` or `--filetype` (optional): Specifies the output file type for the generated documentation (default: markdown). Can be 'markdown', 'html', 'txt' or 'docx'.
 *   `-v` or `--verbose` (optional): Enables verbose output for detailed information (default: false).
-*   `-h` or `--help`: Displays the help message for Bimbus.
+*   `-h` or `--help`: Displays the help message for BimBus.
 
 🌟  Examples
 --------
 
-The following are some examples on how to run Bimbus.
+The following are some examples on how to run BimBus.
 
 Basic usage:
 ```
@@ -109,6 +109,6 @@ We welcome contributions and feedback! If you encounter any issues or have sugge
 📄  License
 -------
 
-Bimbus is released under the [MIT License](https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/LICENSE).
+BimBus is released under the [MIT License](https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/LICENSE).
 
-👩‍💻 Happy documenting with Bimbus!
+👩‍💻 Happy documenting with BimBus!
