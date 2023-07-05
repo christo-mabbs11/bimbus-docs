@@ -26,7 +26,7 @@ async function main ( ) {
 
   // Print the banner
   console.log("\n");
-  console.log(figlet.textSync("BIMBUS AI"));
+  console.log(figlet.textSync("BimBus AI"));
 
   // Define the details
   program
@@ -38,6 +38,7 @@ async function main ( ) {
     .option("-i --input [value]", "Input File")
     .option("-o --output [value]", "Output Directory")
     .option("-f --filetype [value]", "Output File Type")
+    .option("-k --keep", "Keep Files")
     .option("-v --verbose", "Verbose Output")
     // Final processing
     .parse(process.argv);
@@ -242,6 +243,15 @@ async function main ( ) {
   let descriptionBlocksString = descriptionBlocks.join("\n");
   let techDescriptionBlocksString = techDescriptionBlocks.join("\n");
 
+  // If we have the keep option
+  if (options.keep) {
+
+    // Save this data to file
+    writeProcessingDataToFile ( outputDir, descriptionBlocksString, "decription", inputBaseName );
+    writeProcessingDataToFile ( outputDir, techDescriptionBlocksString, "technical", inputBaseName );
+
+  }
+
   // Generate a series of prompts to send to the Open AI API
   var prompts : { [ id : string ] : string } = {
       "Introduction" : "You will be provided information about a file '" + inputBaseName + "' below. Summarise and produce an introduction of '" + inputBaseName + ". Mention the purpose of this file. Provide one or two sentences.\n\n" + descriptionBlocksString+"\n",
@@ -374,6 +384,24 @@ async function openAIChatCompletions( token: string, prompt: string, verbose : b
 
   // return the reply
   return reply;
+
+}
+
+// Function to take the proessing data and write it to a file
+async function writeProcessingDataToFile ( outputDir: string, saveData: string, saveFile : string, originalFileName: string ) {
+
+  // Replace .'s with -'s in the originalFileName
+  let updatedFileName = originalFileName.replace(/\./g, "-");
+
+  // Produce the final output file name
+  let currentDate = new Date( ).toISOString( ).slice(0,10);
+  let outputFileName = updatedFileName + "--" + saveFile + "--" + currentDate + ".txt";
+
+  // Create the full directory path and file name, including the extension
+  let fullFilePath = path.join(outputDir,outputFileName);
+
+  // Write the output to a file
+  fs.writeFileSync(fullFilePath, saveData);
 
 }
 
