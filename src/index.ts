@@ -310,8 +310,22 @@ async function main ( ) {
       // Split the file up
       let fileLines = replies[key].split("\n");
 
-      // If there is more than 3 lines
-      if (fileLines.length > 3) {
+      // Loop through the file lines and count the number of paragraphs
+      let paragraphCount = 0;
+      for (let i2 = 0 ; i2 < fileLines.length ; i2++ ) {
+
+        // If this line is empty
+        if (fileLines[i2] === "") {
+
+          // Increment the paragraph count
+          paragraphCount++;
+
+        }
+
+      }
+
+      // If there is more than 2 paragraphs
+      if (paragraphCount > 2) {
 
         // Remove the first paragraph
         fileLines.splice(0,1);
