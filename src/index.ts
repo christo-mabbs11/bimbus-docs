@@ -126,10 +126,9 @@ async function main ( ) {
   let linesCount = input.split("\n").length;
 
   // Arrays used to keep track of different information
+  let purposeBlocks : string[] = [ ];
   let descriptionBlocks : string[] = [ ];
   let techDescriptionBlocks : string[] = [ ];
-  let descriptionFunctionalBlocks : string[] = [ ];
-  let functionBlocks : string[] = [ ];
 
   // Loop through the code until we reach the end of the file
   let increment = 100;
@@ -151,6 +150,45 @@ async function main ( ) {
     let codeWithLineNumbers = "";
     for (let i1 = 0 ; i1 < codeLines.length ; i1++ ) {
       codeWithLineNumbers += (startIndex+i1+1) + " " + codeLines[i1] + "\n";
+    }
+
+    ////////////////////////////////
+    // Fetch purpose description //
+    //////////////////////////////
+    
+    let prompt0 = "You will be provided a snippet of code from the file '"+inputBaseName+"' between lines "+startIndex+" and "+endIndex+".\n";
+    prompt0 += "You are taking on the role of a senior developer explaining code to a designer with no technical experience.\n";
+    prompt0 += "Explain what the purpose of this code from a very high level in simple, non-technical terms.\n";
+    prompt0 += "Include line numbers in your explanation.\n";
+    prompt0 += "Provide this information as a simple list that begins with dashes and provides the line numbers at the beginning.\n";
+    prompt0 += "Use the following format:\n";
+    prompt0 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
+    if (counter > 0) {
+
+      // Fetch the last line of the previous prompt
+      let lastLine = purposeBlocks[purposeBlocks.length-1];
+
+      // Add the last line to the prompt
+      prompt0 += "Continue on from the line below.\n";
+      prompt0 += lastLine+"\n";
+
+    }
+    prompt0 += "Remember to use the following format:\n";
+    prompt0 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
+    prompt0 += "\n" + codeWithLineNumbers+"\n";
+    let message0 = await openAIChatCompletions(openAIToken, prompt0, options.verbose, 0 );
+
+    // Break the message into lines
+    let message0Lines = message0.split("\n");
+
+    // Add the message1 lines to the purposeBlocks array
+    for (let i1 = 0 ; i1 < message0Lines.length ; i1++ ) {
+
+      // If this line is not empty
+      if (message0Lines[i1].trim( ) !== "") {
+        purposeBlocks.push(message0Lines[i1]);
+      }
+
     }
 
     /////////////////////////////////
@@ -198,7 +236,7 @@ async function main ( ) {
     
     let prompt2 = "You will be provided a snippet of code from the file '"+inputBaseName+"' between lines "+startIndex+" and "+endIndex+".\n";
     prompt2 += "You are taking on the role of a senior developer explaining code to another senior developer.\n";
-    prompt1 += "Explain what this code does in highly detailed, complex, technical terms.\n";
+    prompt2 += "Explain what this code does in highly detailed, complex, technical terms.\n";
     prompt2 += "Include line numbers in your explanation.\n";
     prompt2 += "Provide this information as a simple list that begins with dashes and provides the line numbers at the beginning.\n";
     prompt2 += "Use the following format:\n";
@@ -239,7 +277,8 @@ async function main ( ) {
 
   }
 
-  // Compile the description and tech description blocks into a single string
+  // Compile the description blocks into a single string
+  let purposeBlocksString = purposeBlocks.join("\n");
   let descriptionBlocksString = descriptionBlocks.join("\n");
   let techDescriptionBlocksString = techDescriptionBlocks.join("\n");
 
@@ -247,6 +286,7 @@ async function main ( ) {
   if (options.keep) {
 
     // Save this data to file
+    writeProcessingDataToFile ( outputDir, purposeBlocksString, "purpose", inputBaseName );
     writeProcessingDataToFile ( outputDir, descriptionBlocksString, "decription", inputBaseName );
     writeProcessingDataToFile ( outputDir, techDescriptionBlocksString, "technical", inputBaseName );
 
@@ -254,7 +294,7 @@ async function main ( ) {
 
   // Generate a series of prompts to send to the Open AI API
   var prompts : { [ id : string ] : string } = {
-      "Introduction" : "You will be provided information about a file '" + inputBaseName + "' below. Summarise and produce an introduction of '" + inputBaseName + ". Mention the purpose of this file. Provide one or two sentences.\n\n" + descriptionBlocksString+"\n",
+      "Introduction" : "You will be provided information about a file '" + inputBaseName + "' below. Provide a high level summary on the purpose of '" + inputBaseName + ". Provide one or two paragraphs.\n\n" + purposeBlocksString+"\n",
       "Summary" : "You will be provided information about a file '" + inputBaseName + "' below. Provide a high level summary on the functionality of '" + inputBaseName + " and what it is used for from a non-technical perspective. Provide 3 or 4 paragraphs. Be sure to include an introduction.\n\n" + descriptionBlocksString+"\n",
       "Technical Details" : "You will be provided information about a file '" + inputBaseName + "' below. Summarise an article of paragraphs on the functionality of the code from '" + inputBaseName + " from a purely technical perspective for an experienced developer. Use plain english and write a summarised article of paragraphs. Write 5 or 6 paragraphs. Make each summary paragraph 3 sentences long. Be sure to include an introduction.\n\n" + techDescriptionBlocksString+"\n",
   };
