@@ -36,6 +36,7 @@ async function main ( ) {
     // Bimbus AI Functions
     .option("-t --token [value]", "Open AI Access Token")
     .option("-i --input [value]", "Input File")
+    .option("-m --model [value]", "Open AI Model, accepts gpt-3.5-turbo or gpt-4, default is gpt-3.5-turbo")
     .option("-o --output [value]", "Output Directory")
     .option("-f --filetype [value]", "Output File Type")
     .option("-k --keep", "Keep Files")
@@ -69,6 +70,18 @@ async function main ( ) {
   if (options.filetype) {
     if (options.filetype !== "markdown" && options.filetype !== "docx" && options.filetype !== "text" && options.filetype !== "html") {
       errorAndExit("Error: Invalid output type specified");
+    }
+  }
+
+  // If the model is specified, check it is valid (default is gpt-3.5-turbo and other valid value is gpt-4)
+  // Throw an error if it is not valid
+  // Otherwise, set the model
+  var cgptmodel = "gpt-3.5-turbo";
+  if (options.model) {
+    if (options.model !== "gpt-3.5-turbo" && options.model !== "gpt-4") {
+      errorAndExit("Error: Invalid model specified");
+    } else {
+      cgptmodel = options.model;
     }
   }
 
@@ -130,15 +143,37 @@ async function main ( ) {
   let descriptionBlocks : string[] = [ ];
   let techDescriptionBlocks : string[] = [ ];
 
+  // Setup vars for looping
+  let initialProcessIncrement = 100;
+  let initialProcessCounter = 0;
+
+  // Determine how many times we need to loop + 3 for the extra prompts
+  let totalProgressLoops = Math.ceil(linesCount/initialProcessIncrement) + 3;
+  let totalProgressCounter = 1;
+
+  // Calculate initial speed (roughly 30 seconds per job)
+  let initialSpeed = (totalProgressLoops*30).toFixed(0) + "s";
+
+  // create a new progress bar instance and use shades_classic theme
+  var progressBar = new cliProgress.SingleBar({
+    format: '🚀 Generating.. |' + colors.cyan('{bar}') + '| {percentage}% | {value}/{total} Jobs | Est Remaining: {speed}',
+    barCompleteChar: '\u2588',
+    barIncompleteChar: '\u2591',
+  });
+
+  // Start the progress bar with a total value of 200 and start value of 0
+  progressBar.start(totalProgressLoops, 0, { speed: initialSpeed } );
+
+  // Get the current starting time in milliseconds for processing chat gpt completions
+  var startTime = new Date( ).getTime( );
+
   // Loop through the code until we reach the end of the file
-  let increment = 100;
-  let counter = 0;
   while (true) {
 
     // Fetch the start and end index
     let breakLoop = false;
-    let startIndex = counter * increment - 20;
-    let endIndex = startIndex + increment;
+    let startIndex = initialProcessCounter * initialProcessIncrement - 20;
+    let endIndex = startIndex + initialProcessIncrement;
     if ( startIndex < 0 ) { startIndex = 0; }
     if ( endIndex > linesCount ) { endIndex = linesCount; breakLoop = true; }
 
@@ -163,7 +198,7 @@ async function main ( ) {
     prompt0 += "Provide this information as a simple list that begins with dashes and provides the line numbers at the beginning.\n";
     prompt0 += "Use the following format:\n";
     prompt0 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
-    if (counter > 0) {
+    if (initialProcessCounter > 0) {
 
       // Fetch the last line of the previous prompt
       let lastLine = purposeBlocks[purposeBlocks.length-1];
@@ -176,7 +211,7 @@ async function main ( ) {
     prompt0 += "Remember to use the following format:\n";
     prompt0 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
     prompt0 += "\n" + codeWithLineNumbers+"\n";
-    let message0 = await openAIChatCompletions(openAIToken, prompt0, options.verbose, 0 );
+    let message0 = await openAIChatCompletions(openAIToken, cgptmodel, prompt0, options.verbose, 0 );
 
     // Break the message into lines
     let message0Lines = message0.split("\n");
@@ -202,7 +237,7 @@ async function main ( ) {
     prompt1 += "Provide this information as a simple list that begins with dashes and provides the line numbers at the beginning.\n";
     prompt1 += "Use the following format:\n";
     prompt1 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
-    if (counter > 0) {
+    if (initialProcessCounter > 0) {
 
       // Fetch the last line of the previous prompt
       let lastLine = descriptionBlocks[descriptionBlocks.length-1];
@@ -215,7 +250,7 @@ async function main ( ) {
     prompt1 += "Remember to use the following format:\n";
     prompt1 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
     prompt1 += "\n" + codeWithLineNumbers+"\n";
-    let message1 = await openAIChatCompletions(openAIToken, prompt1, options.verbose, 0 );
+    let message1 = await openAIChatCompletions(openAIToken, cgptmodel, prompt1, options.verbose, 0 );
 
     // Break the message into lines
     let message1Lines = message1.split("\n");
@@ -241,7 +276,7 @@ async function main ( ) {
     prompt2 += "Provide this information as a simple list that begins with dashes and provides the line numbers at the beginning.\n";
     prompt2 += "Use the following format:\n";
     prompt2 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
-    if (counter > 0) {
+    if (initialProcessCounter > 0) {
 
       // Fetch the last line of the previous prompt
       let lastLine = descriptionBlocks[descriptionBlocks.length-1];
@@ -254,7 +289,7 @@ async function main ( ) {
     prompt2 += "Remember to use the following format:\n";
     prompt2 += "- Lines 0-1: Lorem Ipsum dolor sit amet\n";
     prompt2 += "\n" + codeWithLineNumbers+"\n";
-    let message2 = await openAIChatCompletions(openAIToken, prompt2, options.verbose, 0 );
+    let message2 = await openAIChatCompletions(openAIToken, cgptmodel, prompt2, options.verbose, 0 );
 
     // Break the message into lines
     let message2Lines = message2.split("\n");
@@ -272,8 +307,27 @@ async function main ( ) {
     // If break loop is true, break the loop
     if (breakLoop) { break; }
 
-    // Increment the counter
-    counter++;
+    // initialProcessIncrement the initialProcessCounter
+    initialProcessCounter++;
+
+    // Get the updated time in milliseconds
+    let currentTime = new Date( ).getTime( );
+
+    // Find the time difference in seconds
+    let timeDifference = (currentTime - startTime) / 1000;
+
+    // Update the total progress counter
+    totalProgressCounter++;
+
+    // Debug
+    // console.log( totalProgressCounter + "\n" );
+
+    // Determine how long the job will take
+    let remainingJobs = totalProgressLoops - totalProgressCounter;
+    let tspeed = (timeDifference/totalProgressCounter*remainingJobs).toFixed(0) + "s";
+
+    // Update the progress bar
+    progressBar.update(totalProgressCounter, { speed: tspeed });
 
   }
 
@@ -292,6 +346,11 @@ async function main ( ) {
 
   }
 
+  // Only keep the first 400 lines for each of the string blocks
+  purposeBlocksString = purposeBlocksString.split("\n").slice(0,400).join("\n");
+  descriptionBlocksString = descriptionBlocksString.split("\n").slice(0,400).join("\n");
+  techDescriptionBlocksString = techDescriptionBlocksString.split("\n").slice(0,400).join("\n");
+
   // Generate a series of prompts to send to the Open AI API
   var prompts : { [ id : string ] : string } = {
       "Introduction" : "You will be provided information about a file '" + inputBaseName + "' below. Provide a high level summary on the purpose of '" + inputBaseName + ". Provide one or two paragraphs.\n\n" + purposeBlocksString+"\n",
@@ -302,25 +361,12 @@ async function main ( ) {
   // Used to hold the replies
   var replies : { [ id : string ] : string } = { };
 
-  // create a new progress bar instance and use shades_classic theme
-  const progressBar = new cliProgress.SingleBar({
-    format: '🚀 Generating.. |' + colors.cyan('{bar}') + '| {percentage}% | {value}/{total} Jobs | Est Remaining: {speed}',
-    barCompleteChar: '\u2588',
-    barIncompleteChar: '\u2591',
-  });
-
-  // Start the progress bar with a total value of 200 and start value of 0
-  progressBar.start(Object.keys(prompts).length, 0, { speed: "N/A" } );
-
-  // Get the current starting time in milliseconds
-  let startTime = new Date( ).getTime( );
-
   // Loop through the prompts and generate the responses
   for (let i1 = 0 ; i1 < Object.keys(prompts).length ; i1++ ) {
 
     // Fetch the reply
     let key = Object.keys(prompts)[i1];
-    replies[key] = await openAIChatCompletions( openAIToken, prompts[key], options.verbose );
+    replies[key] = await openAIChatCompletions(openAIToken, cgptmodel, prompts[key], options.verbose );
 
     // Get the updated time in milliseconds
     let currentTime = new Date( ).getTime( );
@@ -328,13 +374,18 @@ async function main ( ) {
     // Find the time difference in seconds
     let timeDifference = (currentTime - startTime) / 1000;
 
+    // Update the total progress counter
+    totalProgressCounter++;
+
+    // Debug
+    // console.log( totalProgressCounter + "\n" );
+
     // Determine how long the job will take
-    let i2 = i1 + 1;
-    let remainingJobs = Object.keys(prompts).length - i2;
-    let tspeed = (timeDifference/i2*remainingJobs).toFixed(1) + "s";
+    let remainingJobs = totalProgressLoops - totalProgressCounter;
+    let tspeed = (timeDifference/totalProgressCounter*remainingJobs).toFixed(1) + "s";
 
     // Update the progress bar
-    progressBar.update((i1+1), { speed: tspeed });
+    progressBar.update(totalProgressCounter, { speed: tspeed });
 
   }
 
@@ -357,7 +408,7 @@ async function main ( ) {
         // If this line is empty
         if (fileLines[i2] === "") {
 
-          // Increment the paragraph count
+          // initialProcessIncrement the paragraph count
           paragraphCount++;
 
         }
@@ -410,15 +461,15 @@ function errorAndExit ( message: string ) {
 }
 
 // Function that calls the open AI chat completions API endpoint
-async function openAIChatCompletions( token: string, prompt: string, verbose : boolean, temperature : number = 0.1 ) : Promise<string> {
+async function openAIChatCompletions( token: string, cgptmodel : string, prompt: string, verbose : boolean, temperature : number = 0.1 ) : Promise<string> {
 
-  const configuration = new Configuration({
+  let configuration = new Configuration({
     apiKey: token,
   });
-  const openai = new OpenAIApi(configuration);
-  
-  const chatCompletion = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
+  let openai = new OpenAIApi(configuration);
+
+  let chatCompletion = await openai.createChatCompletion({
+    model: cgptmodel,
     messages: [{role: "user", content: prompt}],
     temperature: temperature,
 
@@ -434,7 +485,7 @@ async function openAIChatCompletions( token: string, prompt: string, verbose : b
   }
 
   // Fetch the reply
-  const reply = chatCompletion.data.choices[0].message.content;
+  let reply = chatCompletion.data.choices[0].message.content;
 
   // return the reply
   return reply;

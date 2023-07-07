@@ -66,6 +66,7 @@ The command accepts the following arguments:
 
 *   `-t` or `--token`: Specifies the OpenAI Access Token.
 *   `-i` or `--input`: Specifies the path to the input file containing code to generate documentation for.
+*   `-m` or `--model`: Open AI Model used to process documentation. Accepts gpt-3.5-turbo or gpt-4. Default model is gpt-3.5-turbo.
 *   `-o` or `--output` (optional): Specifies the output directory where the generated documentation will be saved. If not provided, the documentation will be saved in the current working directory.
 *   `-f` or `--filetype` (optional): Specifies the output file type for the generated documentation (default: markdown). Can be 'markdown', 'html', 'txt' or 'docx'.
 *   `-k` or `--keep` (optional): Specifies if we should keep the meta/processing files being used as part of documentation generation process.
