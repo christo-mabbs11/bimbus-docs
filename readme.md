@@ -26,8 +26,8 @@ Code Documentation Made Easy. BimBus is a sleek and powerful command line tool c
 ⚙️  System Requirements
 -------------------
 
-*   Node.js (v14 or higher)
-*   npm (v18 or higher)
+*   Node.js (v16 or higher)
+*   npm (v8 or higher)
 
 🚀  Installation
 ------------
