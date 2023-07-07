@@ -58,9 +58,10 @@ To generate documentation using BimBus, run the following command:
 ```
  $ node dist/index.js -t <openai_access_token> \
                       -i <input_file_path> \
+                      -m <model> \
                       [-o <output_file_directory>] \
                       [-f <filetype>] \
-                      [-v] [-h]
+                      [-v] [-k] [-h]
 ```
 The command accepts the following arguments:
 
