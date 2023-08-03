@@ -5,7 +5,7 @@
             <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/bimbus.png" width="45" />
             <img src="https://raw.githubusercontent.com/bitgangstudio/bimbus-cli/master/icons/openai.png" width="45" />
             <br/>
-            BimBus AI
+            <span>BimBus AI <small>[Simple Docs]</small></span>
         </h1>
         <h3><strong>Automated Code Documentation</strong></h3>
         <p><strong>Developed using OpenAI's GPT language model APIs</strong></p>
@@ -21,7 +21,7 @@
 📖  Overview
 -------------------
 
-Code Documentation Made Easy. BimBus is a sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. Effortlessly generate thorough and comprehensive documentation for your code files. Works for all file types and projects.
+Automatically Document Code Files with BimBus. BimBus is a sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. Effortlessly generate thorough and comprehensive documentation for your code files. Works for all file types and projects.
 
 ⚙️  System Requirements
 -------------------

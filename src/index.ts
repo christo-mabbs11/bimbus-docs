@@ -152,17 +152,20 @@ async function main ( ) {
   let totalProgressCounter = 1;
 
   // Calculate initial speed (roughly 30 seconds per job)
-  let initialSpeed = (totalProgressLoops*30).toFixed(0) + "s";
+  let initialSpeed = convertTimeFormatMS(totalProgressLoops*30);
 
   // create a new progress bar instance and use shades_classic theme
   var progressBar = new cliProgress.SingleBar({
-    format: '🚀 Generating.. |' + colors.cyan('{bar}') + '| {percentage}% | {value}/{total} Jobs | Est Remaining: {speed}',
+    format: '🚀 Generating.. |' + colors.cyan('{bar}') + '| {percentage}% | {value}/{total} Jobs | Est Remaining: {speed} {loading} ',
     barCompleteChar: '\u2588',
     barIncompleteChar: '\u2591',
   });
 
   // Start the progress bar with a total value of 200 and start value of 0
-  progressBar.start(totalProgressLoops, 0, { speed: initialSpeed } );
+  progressBar.start(totalProgressLoops, 0, { speed: initialSpeed, loading : "" } );
+
+  // Call to have the progress bar updated
+  updateProgressBar(progressBar);
 
   // Get the current starting time in milliseconds for processing chat gpt completions
   var startTime = new Date( ).getTime( );
@@ -192,7 +195,7 @@ async function main ( ) {
     //////////////////////////////
     
     let prompt0 = "You will be provided a snippet of code from the file '"+inputBaseName+"' between lines "+startIndex+" and "+endIndex+".\n";
-    prompt0 += "You are taking on the role of a senior developer explaining code to a designer with no technical experience.\n";
+    prompt0 += "You are taking on the role of a senior developer explaining code to a junior developer.\n";
     prompt0 += "Explain what the purpose of this code from a very high level in simple, non-technical terms.\n";
     prompt0 += "Include line numbers in your explanation.\n";
     prompt0 += "Provide this information as a simple list that begins with dashes and provides the line numbers at the beginning.\n";
@@ -231,7 +234,7 @@ async function main ( ) {
     ///////////////////////////////
     
     let prompt1 = "You will be provided a snippet of code from the file '"+inputBaseName+"' between lines "+startIndex+" and "+endIndex+".\n";
-    prompt1 += "You are taking on the role of a senior developer explaining code to a designer with no technical experience.\n";
+    prompt1 += "You are taking on the role of a senior developer explaining code to a junior developer.\n";
     prompt1 += "Explain what this code does at a high level in very simple, non-technical terms.\n";
     prompt1 += "Include line numbers in your explanation.\n";
     prompt1 += "Provide this information as a simple list that begins with dashes and provides the line numbers at the beginning.\n";
@@ -319,12 +322,9 @@ async function main ( ) {
     // Update the total progress counter
     totalProgressCounter++;
 
-    // Debug
-    // console.log( totalProgressCounter + "\n" );
-
     // Determine how long the job will take
     let remainingJobs = totalProgressLoops - totalProgressCounter;
-    let tspeed = (timeDifference/totalProgressCounter*remainingJobs).toFixed(0) + "s";
+    let tspeed =  convertTimeFormatMS(timeDifference/totalProgressCounter*remainingJobs);
 
     // Update the progress bar
     progressBar.update(totalProgressCounter, { speed: tspeed });
@@ -377,12 +377,9 @@ async function main ( ) {
     // Update the total progress counter
     totalProgressCounter++;
 
-    // Debug
-    // console.log( totalProgressCounter + "\n" );
-
     // Determine how long the job will take
     let remainingJobs = totalProgressLoops - totalProgressCounter;
-    let tspeed = (timeDifference/totalProgressCounter*remainingJobs).toFixed(1) + "s";
+    let tspeed = convertTimeFormatMS(timeDifference/totalProgressCounter*remainingJobs);
 
     // Update the progress bar
     progressBar.update(totalProgressCounter, { speed: tspeed });
@@ -623,3 +620,60 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
 
 }
 
+// Function to run and update the progress bar
+async function updateProgressBar ( progressBar : any, loadingIndex : number = 0 ) {
+
+  // If this loading bar is stopped
+  // Quit the function
+  if (progressBar == null || progressBar.isStopped) {
+    return;
+  }
+
+  // Declare the loading string
+  var spinner = "⣾⣽⣻⢿⡿⣟⣯⣷";
+
+  // Fetch the loading character
+  var loading = spinner[loadingIndex];
+
+  // Set the loading text on the progress bar
+  progressBar.update({ loading : loading });
+
+  // Update the loading index
+  loadingIndex++;
+  if (loadingIndex >= spinner.length) {
+    loadingIndex = 0;
+  }
+
+  // Call this function after a short delay
+  setTimeout(updateProgressBar, 100, progressBar, loadingIndex);
+
+}
+
+// Function takes seconds as a number and returns and returns time as a string in the format xm xs
+function convertTimeFormatMS ( seconds : number ) {
+
+  // Round the seconds to the nearest second
+  seconds = Math.round(seconds);
+
+  // Determine the number of minutes
+  let minutes = Math.floor(seconds / 60);
+
+  // Determine the number of seconds
+  let remainingSeconds = seconds % 60;
+
+  // Create string to be returned
+  let timeString = "";
+  if (minutes > 0) {
+    timeString += minutes + "m";
+  }
+  if ( minutes > 0 && remainingSeconds > 0 ) {
+    timeString += " ";
+  }
+  if (remainingSeconds > 0) {
+    timeString += remainingSeconds + "s";
+  }
+
+  // Return the time string
+  return timeString;
+
+}
