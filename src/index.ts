@@ -341,7 +341,7 @@ async function main ( ) {
 
     // Save this data to file
     writeProcessingDataToFile ( outputDir, purposeBlocksString, "purpose", inputBaseName );
-    writeProcessingDataToFile ( outputDir, descriptionBlocksString, "decription", inputBaseName );
+    writeProcessingDataToFile ( outputDir, descriptionBlocksString, "description", inputBaseName );
     writeProcessingDataToFile ( outputDir, techDescriptionBlocksString, "technical", inputBaseName );
 
   }
@@ -381,8 +381,21 @@ async function main ( ) {
     let remainingJobs = totalProgressLoops - totalProgressCounter;
     let tspeed = convertTimeFormatMS(timeDifference/totalProgressCounter*remainingJobs);
 
-    // Update the progress bar
-    progressBar.update(totalProgressCounter, { speed: tspeed });
+    // If this is the last job
+    if (i1 === Object.keys(prompts).length-1) {
+
+      // Update the progress bar
+      progressBar.update(totalProgressCounter, { speed: tspeed, loading : "" });
+      
+      // stop the progress bar
+      progressBar.stop( );
+
+    } else {
+
+      // Update the progress bar
+      progressBar.update(totalProgressCounter, { speed: tspeed });
+
+    }
 
   }
 
@@ -432,9 +445,6 @@ async function main ( ) {
 
   }
 
-  // stop the progress bar
-  progressBar.stop( );
-
   // Info output
   console.log("\n📝 Writing Output..\n");
 
@@ -443,6 +453,9 @@ async function main ( ) {
 
   // Info output
   console.log("🎉 All Done!\n");
+
+  // Quit the program
+  process.exit(0);
 
 }
 
@@ -621,7 +634,7 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
 }
 
 // Function to run and update the progress bar
-async function updateProgressBar ( progressBar : any, loadingIndex : number = 0 ) {
+function updateProgressBar ( progressBar : any, loadingIndex : number = 0 ) {
 
   // If this loading bar is stopped
   // Quit the function
@@ -671,6 +684,11 @@ function convertTimeFormatMS ( seconds : number ) {
   }
   if (remainingSeconds > 0) {
     timeString += remainingSeconds + "s";
+  }
+
+  // If the time string is empty, set it to 0s
+  if (timeString === "") {
+    timeString = "0s";
   }
 
   // Return the time string
