@@ -155,7 +155,7 @@ async function main ( ) {
 
   // create a new progress bar instance and use shades_classic theme
   var progressBar = new cliProgress.SingleBar({
-    format: '🚀 Generating.. |' + colors.cyan('{bar}') + '| {percentage}% | {value}/{total} Jobs | Est Remaining: {speed} {loading} ',
+    format: '🚀 |' + colors.cyan('{bar}') + '| {percentage}% | {value}/{total} Jobs | Est Remaining: {speed} {loading} ',
     barCompleteChar: '\u2588',
     barIncompleteChar: '\u2591',
   });
@@ -480,17 +480,44 @@ function errorAndExit ( message: string ) {
 // Function that calls the open AI chat completions API endpoint
 async function openAIChatCompletions( token: string, cgptmodel : string, prompt: string, verbose : boolean, temperature : number = 0.1 ) : Promise<string> {
 
-  let configuration = new Configuration({
-    apiKey: token,
-  });
-  let openai = new OpenAIApi(configuration);
+  // Try attempt to run the API call
+  let attempts = 0;
+  while ( true ) {
 
-  let chatCompletion = await openai.createChatCompletion({
-    model: cgptmodel,
-    messages: [{role: "user", content: prompt}],
-    temperature: temperature,
+    // Try to run the API call
+    try {
 
-  });
+      var configuration = new Configuration({
+        apiKey: token,
+      });
+      var openai = new OpenAIApi(configuration);
+
+      var chatCompletion = await openai.createChatCompletion({
+        model: cgptmodel,
+        messages: [{role: "user", content: prompt}],
+        temperature: temperature,
+
+      });
+
+      // Break the loop
+      break;
+
+    } catch (error) {
+
+      // Print there was an error
+      // console.log("Error: Open AI API call failed. Trying again..");
+
+    }
+
+    // If we've tried 3 times
+    if ( attempts++ > 3 ) {
+
+      // Throw an error
+      throw new Error("Error: Open AI API call failed");
+
+    }
+
+  }
 
   // If verbose is enabled, print the details
   if (verbose) {
