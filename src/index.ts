@@ -9,7 +9,6 @@ const fs = require("fs");
 const path = require("path");
 const figlet = require("figlet");
 const { Configuration, OpenAIApi } = require("openai");
-import { Document, Packer, Paragraph, TextRun } from "docx";
 const cliProgress = require('cli-progress');
 const colors = require('ansi-colors');
 
@@ -66,9 +65,9 @@ async function main ( ) {
   }
 
   // If outputType is specified, ensure it is valid
-  // Valid values are markdown, docx and txt
+  // Valid values are markdown and html
   if (options.filetype) {
-    if (options.filetype !== "markdown" && options.filetype !== "docx" && options.filetype !== "text" && options.filetype !== "html") {
+    if (options.filetype !== "markdown" && options.filetype !== "html") {
       errorAndExit("Error: Invalid output type specified");
     }
   }
@@ -534,10 +533,6 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
   let fileExtension = "";
   if (outputType === "markdown") {
     fileExtension = ".md";
-  } else if (outputType === "docx") {
-    fileExtension = ".docx";
-  } else if (outputType === "text") {
-    fileExtension = ".txt";
   } else if (outputType === "html") {
     fileExtension = ".html";
   }
@@ -556,58 +551,6 @@ async function writeOutputToFile ( outputDir: string, outputType: string, output
     for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
       let key = Object.keys(output)[i1];
       outputText += "## " + key + "\n\n";
-      outputText += output[key] + "\n\n";
-    }
-
-    // Write the output to a file
-    fs.writeFileSync(fullFilePath, outputText);
-
-  } else if (outputType === "docx") {
-
-    // Create the paragraphs
-    const paragraphs = [ ];
-    for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
-      let key = Object.keys(output)[i1];
-      paragraphs.push(new Paragraph({
-        children: [
-          new TextRun({
-            text: key,
-            bold: true,
-          }),
-          new TextRun({
-            text: "\n\n",
-          }),
-          new TextRun({
-            text: output[key],
-          }),
-          new TextRun({
-            text: "\n\n",
-          }),
-        ],
-      }));
-    }
-
-    // Create the document
-    const doc = new Document({
-      sections: [{
-        children: paragraphs,
-      }],
-    });
-
-    // Used to export the file into a .docx file
-    Packer.toBuffer(doc).then((buffer) => {
-      fs.writeFileSync(fullFilePath, buffer);
-    });
-
-  } else if (outputType === "text") {
-
-    // Add the title to the output
-    outputText += originalFileName + " Documentation\n\n";
-
-    // Loop through the output and add it to the outputText
-    for (let i1 = 0 ; i1 < Object.keys(output).length ; i1++ ) {
-      let key = Object.keys(output)[i1];
-      outputText += key + "\n";
       outputText += output[key] + "\n\n";
     }
 
