@@ -155,7 +155,7 @@ async function main ( ) {
 
   // create a new progress bar instance and use shades_classic theme
   var progressBar = new cliProgress.SingleBar({
-    format: '🚀 |' + colors.cyan('{bar}') + '| {percentage}% | {value}/{total} Jobs | Est Remaining: {speed} {loading} ',
+    format: '🚀 ' + colors.cyan('{bar}') + ' {percentage}% | {value}/{total} Jobs | Est Remaining: {speed} {loading} ',
     barCompleteChar: '\u2588',
     barIncompleteChar: '\u2591',
   });
@@ -392,7 +392,7 @@ async function main ( ) {
     if (i1 === Object.keys(prompts).length-1) {
 
       // Update the progress bar
-      progressBar.update(totalProgressCounter, { speed: tspeed, loading : "" });
+      progressBar.update(totalProgressCounter, { speed: tspeed, loading : "  " });
       
       // stop the progress bar
       progressBar.stop( );
