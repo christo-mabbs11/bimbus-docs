@@ -21,7 +21,7 @@
 📖  Overview
 -------------------
 
-Automatically Document Code Files with BimBus. BimBus is a sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. Effortlessly generate thorough and comprehensive documentation for your code files. Works for all file types and projects.
+Automatically Document Programming Files and Scripts with BimBus. BimBus is a sleek and powerful command line tool crafted with Node.js and fueled by OpenAI's cutting-edge technology. Effortlessly generate thorough and comprehensive documentation for your code files. Works for all file types and projects.
 
 ⚙️  System Requirements
 -------------------
