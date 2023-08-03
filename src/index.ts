@@ -643,17 +643,31 @@ function updateProgressBar ( progressBar : any, loadingIndex : number = 0 ) {
   }
 
   // Declare the loading string
-  var spinner = "⣾⣽⣻⢿⡿⣟⣯⣷";
+  let spindex = 0;
+  var spinner = [
+    "⣾⣽⣻⢿⡿⣟⣯⣷",
+    "▁▂▃▄▅▆▇█▇▆▅▄▃▁",
+    "←↖↑↗→↘↓↙",
+    "▉▊▋▌▍▎▏▎▍▌▋▊▉",
+    "▖▘▝▗",
+    "┤┘┴└├┌┬┐",
+    "◢◣◤◥",
+    "◰◳◲◱",
+    "◴◷◶◵",
+    "◐◓◑◒",
+    "◡◡⊙⊙◠◠",
+    "⠁⠂⠄⡀⢀⠠⠐⠈",
+  ];
 
   // Fetch the loading character
-  var loading = spinner[loadingIndex];
+  var loading = spinner[spindex][loadingIndex];
 
   // Set the loading text on the progress bar
   progressBar.update({ loading : loading });
 
   // Update the loading index
   loadingIndex++;
-  if (loadingIndex >= spinner.length) {
+  if (loadingIndex >= spinner[spindex].length) {
     loadingIndex = 0;
   }
 
