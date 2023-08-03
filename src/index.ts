@@ -502,10 +502,10 @@ async function openAIChatCompletions( token: string, cgptmodel : string, prompt:
       // Break the loop
       break;
 
-    } catch (error) {
+    } catch (error : any ) {
 
-      // Print there was an error
-      // console.log("Error: Open AI API call failed. Trying again..");
+      // Fetch the error message
+      var errorMessage = error.message + "\nSee https://platform.openai.com/docs/guides/error-codes/api-errors for more details.\n\n";
 
     }
 
@@ -513,7 +513,7 @@ async function openAIChatCompletions( token: string, cgptmodel : string, prompt:
     if ( attempts++ > 3 ) {
 
       // Throw an error
-      throw new Error("Error: Open AI API call failed");
+      throw new Error( errorMessage );
 
     }
 
