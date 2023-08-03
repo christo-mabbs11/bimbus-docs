@@ -7,6 +7,7 @@
     "bimbus": "./dist/index.js"
   },
   "scripts": {
+    "dev": "npx nodemon -e ts --exec \"npm run build\"",
     "build": "npx tsc"
   },
   "keywords": [
@@ -23,13 +24,10 @@
     "commander": "^11.0.0",
     "docx": "^8.2.0",
     "figlet": "^1.6.0",
-    "gulp-typescript": "^6.0.0-alpha.1",
     "openai": "^3.3.0"
   },
   "devDependencies": {
     "@types/node": "^20.3.2",
-    "gulp": "^4.0.2",
-    "gulp-plumber": "^1.2.1",
     "typescript": "^5.1.6"
   }
 }
