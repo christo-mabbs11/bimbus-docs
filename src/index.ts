@@ -350,11 +350,19 @@ async function main ( ) {
   descriptionBlocksString = descriptionBlocksString.split("\n").slice(0,400).join("\n");
   techDescriptionBlocksString = techDescriptionBlocksString.split("\n").slice(0,400).join("\n");
 
+  // Determine output length based on length of the string blocks
+  let purposeBlockLength = purposeBlocksString.split("\n").length;
+  let purposeBlockLengthOutput = "2"; if ( purposeBlockLength > 50 ) { purposeBlockLengthOutput = "4"; } else if ( purposeBlockLength > 30 ) { purposeBlockLengthOutput = "3"; }
+  let descriptionBlockLength = descriptionBlocksString.split("\n").length;
+  let descriptionBlockLengthOutput = "4"; if ( descriptionBlockLength > 50 ) { descriptionBlockLengthOutput = "8"; } else if ( descriptionBlockLength > 30 ) { descriptionBlockLengthOutput = "6"; }
+  let techDescriptionBlockLength = techDescriptionBlocksString.split("\n").length;
+  let techDescriptionBlockLengthOutput = "6"; if ( techDescriptionBlockLength > 50 ) { techDescriptionBlockLengthOutput = "12"; } else if ( techDescriptionBlockLength > 30 ) { techDescriptionBlockLengthOutput = "9"; }
+
   // Generate a series of prompts to send to the Open AI API
   var prompts : { [ id : string ] : string } = {
-      "Introduction" : "You will be provided information about a file '" + inputBaseName + "' below. Provide a high level summary on the purpose of '" + inputBaseName + ". Provide one or two paragraphs.\n\n" + purposeBlocksString+"\n",
-      "Summary" : "You will be provided information about a file '" + inputBaseName + "' below. Provide a high level summary on the functionality of '" + inputBaseName + " and what it is used for from a non-technical perspective. Provide 3 or 4 paragraphs. Be sure to include an introduction.\n\n" + descriptionBlocksString+"\n",
-      "Technical Details" : "You will be provided information about a file '" + inputBaseName + "' below. Summarise an article of paragraphs on the functionality of the code from '" + inputBaseName + " from a purely technical perspective for an experienced developer. Use plain english and write a summarised article of paragraphs. Write 5 or 6 paragraphs. Make each summary paragraph 3 sentences long. Be sure to include an introduction.\n\n" + techDescriptionBlocksString+"\n",
+      "Introduction" : "You will be provided information about a file '" + inputBaseName + "' below. Provide a high level summary on the purpose of '" + inputBaseName + ". Write around " + purposeBlockLengthOutput + " paragraphs.\n\n" + purposeBlocksString+"\n",
+      "Summary" : "You will be provided information about a file '" + inputBaseName + "' below. Provide a high level summary on the functionality of '" + inputBaseName + " and what it is used for from a non-technical perspective. Write around " + descriptionBlockLengthOutput + " paragraphs. Be sure to include an introduction.\n\n" + descriptionBlocksString+"\n",
+      "Technical Details" : "You will be provided information about a file '" + inputBaseName + "' below. Summarise an article of paragraphs on the functionality of the code from '" + inputBaseName + " from a purely technical perspective for an experienced developer. Use plain english and write a summarised article of paragraphs. Write around " + techDescriptionBlockLengthOutput + " paragraphs. Be sure to include an introduction.\n\n" + techDescriptionBlocksString+"\n",
   };
 
   // Used to hold the replies
